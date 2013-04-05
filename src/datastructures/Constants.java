@@ -63,5 +63,5 @@ public class Constants {
 	/* FESTIVAL INFORMATION FILE */
 	public static final String FESTIVAL_XML_FILE = "files/festivalClasses.xml";
 	public static final String FESTIVAL_USER_INFORMATION_FILE = "files/userInfo.txt";
-	public static final double TAX = 0.06;
+	public static final double TAX = 0.03;
 }

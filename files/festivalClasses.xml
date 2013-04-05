@@ -3,59 +3,99 @@
 		<Event>
 			<Date>
 				<WeekDay>Friday</WeekDay>
-				<Day>20</Day>
+				<Day>5</Day>
 				<Month>April</Month>
 			</Date>
 			<Classes>	
 				<Class>
 					<Name>Beginner's Crash Course</Name>
-					<Teachers>Jake &amp; Dasha</Teachers>
+					<Teachers>Jake &amp; Mariana</Teachers>
 					<Level>Beg</Level>
 					<StartTime>1800</StartTime>
 					<EndTime>1930</EndTime>
 					<Room>Atrium</Room>
 				</Class>
 				<Class>
-					<Name>Villa Urquiza</Name>
-					<Teachers>Ney &amp; Rosa</Teachers>
+					<Name>Changes of Directions from the Base Cruzada</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
 					<Level>Int</Level>
-					<StartTime>1730</StartTime>
-					<EndTime>1900</EndTime>
+					<StartTime>1800</StartTime>
+					<EndTime>1930</EndTime>
 					<Room>Prince Georges</Room>
 				</Class>
 				<Class>
-					<Name>Musicality for Romantic &amp; Dramatic Music</Name>
-					<Teachers>Ney &amp; Rosa</Teachers>
+					<Name>Milonga Part 1</Name>
+					<Teachers>Adamn &amp; Ciko</Teachers>
 					<Level>Int</Level>
-					<StartTime>2000</StartTime>
-					<EndTime>2130</EndTime>
+					<StartTime>1930</StartTime>
+					<EndTime>2100</EndTime>
 					<Room>Prince Georges</Room>
 				</Class>
 			</Classes>
 			<Milonga>
 				<Name>The Start of a Journey Milonga</Name>
 				<StartTime>2100</StartTime>
-				<EndTime>100</EndTime>
+				<EndTime>130</EndTime>
 			</Milonga>
 		</Event>
 		<Event>
 			<Date>
 				<WeekDay>Saturday</WeekDay>
-				<Day>21</Day>
+				<Day>6</Day>
 				<Month>April</Month>
 			</Date>
 			<Classes>
 				<Class>	
-					<Name>Cross-System Ninjas: Become masters of stealth and dexterity in cross-system</Name>
-					<Teachers>Eric &amp; Rebecca</Teachers>
+					<Name>Rhythmical Rebounds</Name>
+					<Teachers>Adam &amp; Ciko</Teachers>
 					<Level>Int</Level>
+					<StartTime>1200</StartTime>
+					<EndTime>1330</EndTime>
+					<Room>Prince Georges</Room>
+				</Class>
+				<Class>	
+					<Name>Over turned back boleos</Name>
+					<Teachers>Adam &amp; Ciko</Teachers>
+					<Level>Int/Adv</Level>
 					<StartTime>1400</StartTime>
 					<EndTime>1530</EndTime>
 					<Room>Prince Georges</Room>
 				</Class>
+				<Class>	
+					<Name>Musicality &amp; Structure</Name>
+					<Teachers>Jake &amp; Mariana</Teachers>
+					<Level>Int/Adv</Level>
+					<StartTime>1600</StartTime>
+					<EndTime>1730</EndTime>
+					<Room>Prince Georges</Room>
+				</Class>
+				<Class>	
+					<Name>The Clockwork Turn: Enrosques &amp; Lapices</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
+					<Level>Int</Level>
+					<StartTime>1200</StartTime>
+					<EndTime>1330</EndTime>
+					<Room>Atrium</Room>
+				</Class>
+				<Class>	
+					<Name>Barridas from the Turn</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
+					<Level>Int/Adv</Level>
+					<StartTime>1400</StartTime>
+					<EndTime>1530</EndTime>
+					<Room>Atrium</Room>
+				</Class>
+				<Class>	
+					<Name>Accessible Back Sacadas</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
+					<Level>Adv</Level>
+					<StartTime>1600</StartTime>
+					<EndTime>1730</EndTime>
+					<Room>Atrium</Room>
+				</Class>
 			</Classes>
 			<Milonga>
-				<Name>The Grand Milonga</Name>
+				<Name>Grand Milonga</Name>
 				<StartTime>2100</StartTime>
 				<EndTime>130</EndTime>
 			</Milonga>
@@ -63,25 +103,57 @@
 		<Event>
 			<Date>
 				<WeekDay>Sunday</WeekDay>
-				<Day>22</Day>
+				<Day>7</Day>
 				<Month>April</Month>
 			</Date>
 			<Classes>
 				<Class>	
-					<Name>Paradas and cruzadas</Name>
-					<Teachers>Ney &amp; Rosa</Teachers>
+					<Name>Labrynthine Leg Wraps</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
+					<Level>Int</Level>
+					<StartTime>1200</StartTime>
+					<EndTime>1330</EndTime>
+					<Room>Prince Georges</Room>
+				</Class>
+				<Class>	
+					<Name>Whimsical Spinning Colgadas</Name>
+					<Teachers>Nick &amp; Diana</Teachers>
 					<Level>Int/Adv</Level>
+					<StartTime>1400</StartTime>
+					<EndTime>1530</EndTime>
+					<Room>Prince Georges</Room>
+				</Class>
+				<Class>	
+					<Name>A Potpourri of Cadenas</Name>
+					<Teachers>Jake &amp; Mariana</Teachers>
+					<Level>Int/Adv</Level>
+					<StartTime>1600</StartTime>
+					<EndTime>1730</EndTime>
+					<Room>Prince Georges</Room>
+				</Class>
+				<Class>	
+					<Name>Milonga Part 2 - Traspie</Name>
+					<Teachers>Adam &amp; Ciko</Teachers>
+					<Level>Int</Level>
 					<StartTime>1200</StartTime>
 					<EndTime>1330</EndTime>
 					<Room>Atrium</Room>
 				</Class>
 				<Class>	
-					<Name>Complex figures to the left: Understanding continuity and flow through classical combinations</Name>
-					<Teachers>Eric &amp; Rebecca</Teachers>
+					<Name>Secret milonguero gems from Buenos Aires</Name>
+					<Teachers>Adam &amp; Ciko</Teachers>
 					<Level>Int/Adv</Level>
 					<StartTime>1400</StartTime>
 					<EndTime>1530</EndTime>
-					<Room>Prince Georges</Room>
+					<Room>Atrium</Room>
+				</Class>
+				<Class>	
+					<Name>The evolution into Nuevo Tango</Name>
+					<Teachers>Adam &amp; Ciko</Teachers>
+					<Level>Int/Adv</Level>
+					<StartTime>1600</StartTime>
+					<EndTime>1730</EndTime>
+					<Room>Atrium</Room>
 				</Class>
 			</Classes>
 			<Milonga>
@@ -98,9 +170,9 @@
 				<FridayPass>30</FridayPass>
 				<SaturdayPass>40</SaturdayPass>
 				<SundayPass>35</SundayPass>
-				<MilongaPass>35</MilongaPass>
+				<MilongaPass>0</MilongaPass>
 			</SpecialPasses>
-			<SingleClass>35</SingleClass>
+			<SingleClass>20</SingleClass>
 			<Milongas>
 				<Friday>0</Friday>
 				<Saturday>0</Saturday>
@@ -109,32 +181,32 @@
 		</UmdGmuStudent>
 		<OtherStudent>
 			<SpecialPasses>
-				<FullPass>70</FullPass>
-				<FridayPass>30</FridayPass>
-				<SaturdayPass>40</SaturdayPass>
-				<SundayPass>35</SundayPass>
-				<MilongaPass>35</MilongaPass>
+				<FullPass>100</FullPass>
+				<FridayPass>40</FridayPass>
+				<SaturdayPass>50</SaturdayPass>
+				<SundayPass>45</SundayPass>
+				<MilongaPass>40</MilongaPass>
 			</SpecialPasses>
-			<SingleClass>35</SingleClass>
+			<SingleClass>25</SingleClass>
 			<Milongas>
-				<Friday>5</Friday>
-				<Saturday>5</Saturday>
-				<Sunday>5</Sunday>
+				<Friday>10</Friday>
+				<Saturday>20</Saturday>
+				<Sunday>10</Sunday>
 			</Milongas>
 		</OtherStudent>
 		<GeneralAdmission>
 			<SpecialPasses>
-				<FullPass>100</FullPass>
-				<FridayPass>50</FridayPass>
+				<FullPass>170</FullPass>
+				<FridayPass>60</FridayPass>
 				<SaturdayPass>80</SaturdayPass>
-				<SundayPass>45</SundayPass>
-				<MilongaPass>45</MilongaPass>
+				<SundayPass>70</SundayPass>
+				<MilongaPass>50</MilongaPass>
 			</SpecialPasses>
-			<SingleClass>40</SingleClass>
+			<SingleClass>35</SingleClass>
 			<Milongas>
-				<Friday>10</Friday>
-				<Saturday>10</Saturday>
-				<Sunday>10</Sunday>
+				<Friday>15</Friday>
+				<Saturday>25</Saturday>
+				<Sunday>15</Sunday>
 			</Milongas>
 		</GeneralAdmission>
 	</Prices>
