@@ -174,6 +174,10 @@ public class PaymentValidator {
 			
 			// create ticket
 			String eTicketFile = eticketMaker.createTicket (reg.name, reg.studentType, trueClasses);
+			if (null == eTicketFile) {
+				System.err.println("Could not create an e-ticket");
+				return;
+			}
 			
 			// create email
 			emailer.resetEmail ();
