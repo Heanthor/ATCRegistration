@@ -73,6 +73,7 @@ public class ETicketMaker {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		
 		return output;
