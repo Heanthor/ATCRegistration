@@ -41,7 +41,10 @@ public class Enums {
 	public enum SheetClientMode {
 		FORM_SITE, ON_SITE;
 	}
-	
+
+	public enum RegistrationMode {
+		EARLY_REGISTRATION, LATE_REGISTRATION
+	}
 	
 	/* Strings used with the XML document to parse from string to enum types */
 	

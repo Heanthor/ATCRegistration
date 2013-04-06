@@ -38,6 +38,7 @@ import java.util.List;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import datastructures.Enums.SheetClientMode;
+import datastructures.Enums.RegistrationMode;
 /**
  * A GUI that uses the SheetClient class as a back-end to perform
  * operations upon the registration data.
@@ -110,6 +111,7 @@ public class RegistrationGUI {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 	
 	private JList<RegistrantWrapper> list;
 	private DefaultListModel<RegistrantWrapper> dlm;
@@ -288,6 +290,10 @@ public class RegistrationGUI {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JButton btnDelete = new JButton("Delete");
@@ -408,6 +414,15 @@ public class RegistrationGUI {
 			}
 		});
 		panel_1.add(comboBox, "2, 46, fill, default");
+		
+		comboBox_1 = new JComboBox();
+		comboBox_1.setModel(new DefaultComboBoxModel(RegistrationMode.values()));
+		comboBox_1.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				pv.changeRegistrationMode ((RegistrationMode) comboBox_1.getSelectedItem ());
+			}
+		});
+		panel_1.add(comboBox_1, "2, 50, fill, default");
 	}
 	
 	/**

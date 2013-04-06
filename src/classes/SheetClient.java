@@ -22,6 +22,7 @@ import com.google.gdata.util.ServiceException;
 
 import datastructures.AccountInformation;
 import datastructures.Constants;
+import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
 import datastructures.RegistrationWorksheet;
@@ -37,6 +38,9 @@ import datastructures.RegistrationWorksheet;
  * 	<li>Adding on-site registrations</li>
  * </ol>
  * 
+ * The default registration mode of the SheetClient is EARLY. This is 
+ * because the late registration spreadsheet may not have been made yet.
+ * 
  * @author benjamyn
  *
  */
@@ -46,7 +50,8 @@ public class SheetClient {
 	private WorksheetEntry wEntries[];
 	private FeedURLFactory factory; // generates the appropriate feed URLs
 	private SheetClientMode mode;
-	private RegistrationWorksheet regWorksheet; // object to parse and retrieve information from cell feeds 
+	private RegistrationWorksheet regWorksheet; // object to parse and retrieve information from cell feeds
+	private RegistrationMode regisMode; // early or late registration
 	
 	/**
 	 * While the sheet mode is set, the SheetClient must be refreshed
@@ -62,21 +67,23 @@ public class SheetClient {
 		factory = FeedURLFactory.getDefault();
 		
 		login ();
+
+		regisMode = RegistrationMode.EARLY_REGISTRATION;
 		
 		// get spreadsheet
 		SpreadsheetEntry spreadsheet = getSpreadsheet ();
 		if (spreadsheet == null)
-			throw new AtcErr ("Could not locate spreadsheet: " + ai.spreadsheetTitle);
+			throw new AtcErr ("Could not locate spreadsheet: " + ai.spreadsheets[regisMode.ordinal ()]);
 			
 		// get formsite worksheet
-		WorksheetEntry formsiteWorksheet = getWorksheetEntry (spreadsheet, ai.worksheetTitleFormsite);
+		WorksheetEntry formsiteWorksheet = getWorksheetEntry (spreadsheet, ai.formsiteWkShtTitles[regisMode.ordinal ()]);
 		if (formsiteWorksheet == null)
-			throw new AtcErr ("Could not locate worksheet: " + ai.worksheetTitleFormsite);
+			throw new AtcErr ("Could not locate worksheet: " + ai.formsiteWkShtTitles[regisMode.ordinal ()]);
 		
-		// get formsite worksheet	
-		WorksheetEntry onsiteWorksheet = getWorksheetEntry (spreadsheet, ai.worksheetTitleOnSite);
+		// get onsite worksheet	
+		WorksheetEntry onsiteWorksheet = getWorksheetEntry (spreadsheet, ai.onsiteWkShtTitles[regisMode.ordinal ()]);
 		if (onsiteWorksheet == null)
-			throw new AtcErr ("Could not locate worksheet: " + ai.worksheetTitleOnSite);
+			throw new AtcErr ("Could not locate worksheet: " + ai.onsiteWkShtTitles[regisMode.ordinal ()]);
 
 		wEntries = new WorksheetEntry [2];
 		wEntries [SheetClientMode.FORM_SITE.ordinal()] = formsiteWorksheet;
@@ -102,6 +109,37 @@ public class SheetClient {
 		refresh ();
 	}
 	
+	/**
+	 * This function updates the local spreadsheet information for
+	 * the given registration mode (even if it is the same as the 
+	 * current mode)
+	 * 
+	 * @param mode
+	 */
+	public void setRegistrationMode(RegistrationMode regMode) {
+		this.regisMode = regMode;
+		
+		// get spreadsheet
+		SpreadsheetEntry spreadsheet = getSpreadsheet ();
+		if (spreadsheet == null)
+			throw new AtcErr ("Could not locate spreadsheet: " + ai.spreadsheets[regisMode.ordinal ()]);
+			
+		// get formsite worksheet
+		WorksheetEntry formsiteWorksheet = getWorksheetEntry (spreadsheet, ai.formsiteWkShtTitles[regisMode.ordinal ()]);
+		if (formsiteWorksheet == null)
+			throw new AtcErr ("Could not locate worksheet: " + ai.formsiteWkShtTitles[regisMode.ordinal ()]);
+		
+		// get onsite worksheet	
+		WorksheetEntry onsiteWorksheet = getWorksheetEntry (spreadsheet, ai.onsiteWkShtTitles[regisMode.ordinal ()]);
+		if (onsiteWorksheet == null)
+			throw new AtcErr ("Could not locate worksheet: " + ai.onsiteWkShtTitles[regisMode.ordinal ()]);
+
+		wEntries [SheetClientMode.FORM_SITE.ordinal()] = formsiteWorksheet;
+		wEntries [SheetClientMode.ON_SITE.ordinal()] = onsiteWorksheet;
+		
+		refresh();
+	}
+	
 	private void login () {
 		try {
 			service.setUserCredentials(ai.userName, ai.passwd);
@@ -117,7 +155,7 @@ public class SheetClient {
 			
 			// try and find the spreadsheet with the given title
 			for (SpreadsheetEntry sheet : spreadsheets)
-				if (sheet.getTitle().getPlainText().trim().compareTo(ai.spreadsheetTitle) == 0)
+				if (sheet.getTitle().getPlainText().trim().compareTo(ai.spreadsheets[regisMode.ordinal ()]) == 0)
 					return sheet;
 			
 		} catch (IOException | ServiceException e) {

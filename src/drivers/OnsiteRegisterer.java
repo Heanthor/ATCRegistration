@@ -13,6 +13,7 @@ import classes.SheetClient;
 import datastructures.AccountInformation;
 import datastructures.Constants;
 import datastructures.Enums.FestivalDay;
+import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Enums.SpecialPassType;
 import datastructures.Enums.StudentType;
@@ -51,6 +52,7 @@ public class OnsiteRegisterer {
 	public OnsiteRegisterer (String userInfoFile) {
 		ai = new AccountInformation (userInfoFile);
 		sc = new SheetClient (ai, SheetClientMode.ON_SITE);
+		sc.setRegistrationMode (RegistrationMode.LATE_REGISTRATION);
 		gui = null;
 		
 		festival = new Festival (Constants.FESTIVAL_XML_FILE);

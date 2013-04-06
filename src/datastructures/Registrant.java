@@ -115,6 +115,7 @@ public class Registrant implements Comparable <Registrant> {
 
 	@Override
 	public int compareTo (Registrant arg0) {
-		return this.name.last.toLowerCase ().compareTo (arg0.name.last.toLowerCase ());
+		//return this.name.last.toLowerCase ().compareTo (arg0.name.last.toLowerCase ());
+		return this.row - arg0.row;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 import classes.AtcErr;
+import datastructures.Enums.RegistrationMode;
 
 /**
  * This immutable class reads in the user information from a file 
@@ -25,9 +26,10 @@ import classes.AtcErr;
 public class AccountInformation {
 	public final String userName;
 	public final String passwd;
-	public final String spreadsheetTitle;
-	public final String worksheetTitleFormsite;
-	public final String worksheetTitleOnSite;
+	
+	public final String[] spreadsheets;
+	public final String[] formsiteWkShtTitles;
+	public final String[] onsiteWkShtTitles;
 	
 	public AccountInformation (String fileName) {
 		if (fileName == null)
@@ -43,9 +45,17 @@ public class AccountInformation {
 		
 		userName = s.nextLine().trim();
 		passwd = s.nextLine().trim();
-		spreadsheetTitle = s.nextLine().trim();
-		worksheetTitleFormsite = s.nextLine().trim();
-		worksheetTitleOnSite = s.nextLine().trim();
+		
+		int numRegModes = RegistrationMode.values ().length;
+		spreadsheets = new String[numRegModes];
+		formsiteWkShtTitles = new String[numRegModes];
+		onsiteWkShtTitles = new String[numRegModes];
+		
+		for (int i = 0; i < numRegModes; ++i) {
+			spreadsheets[i] = s.nextLine().trim();
+			formsiteWkShtTitles[i] = s.nextLine().trim();
+			onsiteWkShtTitles[i] = s.nextLine().trim();
+		}
 		
 		s.close ();
 	}

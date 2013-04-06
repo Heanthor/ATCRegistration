@@ -9,6 +9,7 @@ import classes.RegistrationGUI;
 import classes.SheetClient;
 import datastructures.AccountInformation;
 import datastructures.Constants;
+import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
 
@@ -371,6 +372,17 @@ public class PaymentValidator {
 	 */
 	public void changeSheetClientMode (SheetClientMode mode) {
 		sc.setMode (mode);
+		refresh ();
+	}
+	
+	/**
+	 * Changes the registration mode, refreshing the local spreadsheet
+	 * information and refreshes the GUI to contain this information
+	 * 
+	 * @param mode new mode for the spreadsheet client
+	 */
+	public void changeRegistrationMode (RegistrationMode mode) {
+		sc.setRegistrationMode (mode);
 		refresh ();
 	}
 }
