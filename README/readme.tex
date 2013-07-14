@@ -19,6 +19,7 @@
 \tableofcontents
 
 \sn{Drivers}
+
 There are three primary drivers used for processing registrants, 
 performing registration activities, and sending out emails to all
 the confirmed registrants. 
@@ -130,7 +131,43 @@ that contains the driver. This will be \code{PaymentValidator},
 completely self-inclusive. Click \emph{Finish} and you're done!
 
 There might be some warnings, but don't worry about them. You can then run the
-jar using Java.
+jar using Java. 
+
+\ssn{Running in Windows}
+
+In Windows, the \code{PaymentValidator} and
+\code{OnsiteRegisterer} can be run by just double clicking on the jar file.
+The \code{MassEmailer} is a bit more difficult to run in Windows because it
+takes an argument, so you need to run this using DOS/Command Prompt. I don't
+know where it is in Windows, but I think it's something like \emph{Programs\ra
+Accessories\ra Command Prompt}. In the command prompt do the following:
+\benum
+	\item Change directory to where the \code{MassEmailer} jar program exists.
+		I'll call it \code{massEmailer.jar}.
+	\item Run the jar with java using its absolute path. It's probably something like:
+		\code{"C:\textbackslash{}Program Files (x86)\textbackslash{}Java\textbackslash{}jre7\textbackslash{}bin\textbackslash{}java" -jar massiveEmailer.jar argument}
+	\item \code{argument} is either 1 or 2, depending on which email type you want to send
+\eenum
+
+\ssn{Running using Linux}
+
+Running on Linux is SOOOOO easy. You could open it like Windows: use your file
+browser (dolphin in KDE and nautilus in GNOME). Right click the jar file, "Open
+with", and then type \code{java -jar} in the text box. 
+
+Another way is to run it in a terminal which I recommend because you'll be able
+to view any errors that get created during the running of the program. Change
+to the directory containing the jar file and run:
+\bitem
+	\citem{java -jar paymentValidator.jar}{}
+	\citem{java -jar onsiteRegistration.jar}{}
+	\citem{java -jar massEmailer.jar [argument]}{where \code{argument} is either 1 or 2}
+\eitem
+
+\ssn{Running using MacOS}
+
+I have no idea. It's probably similar to Linux since they're both UNIX-like
+operating systems. Google will be your friend.
 
 \sn{Troubleshooting, Problems}
 
@@ -142,7 +179,23 @@ Note that the \code{PaymentValidator} will throw a bunch of errors if you set
 it to a worksheet that contains \tb{NO} registrants i.e. it is empty except for
 the formsite question header.
 
+\ssn{I double-click on the jar but nothing happens}
+
+Make sure you hava Java installed. If that's not it, then it's probably
+because you do not have all the configuration files that you need. If you run
+the program in a terminal, it will produce output that will hopefully be able
+to help you discover the problem and potentially which file you are missing.
+
+The files you need are all found in the \code{files} folder of the source code.
+I recommend distributing the \code{files} directory with the jar executable
+files during the festival, but not with the source code. 
+
+Also, make sure that the \code{files/config.xml} file exists. This should
+\tb{never} be put in the repository but emailed/shared amongst the tango
+members because is contains the google username and password of our account.
+
 \sn{Hacking notes}
+
 Note that according to Google, when you use the LineFeed to get information
 from the spreadsheet, the first row will not be returned in that LineFeed.
 This is because the first row is considered a header row and thus
