@@ -1,0 +1,44 @@
+\usepackage[bookmarksopen=true,pdfborder={0 0 0},colorlinks=true,linkcolor=blue,bookmarksnumbered=true]{hyperref}
+\usepackage{enumerate}
+
+% sections
+\newcommand{\sn}[1]{\section{#1}}
+\newcommand{\ssn}[1]{\subsection{#1}}
+\newcommand{\sssn}[1]{\subsubsection{#1}}
+
+% itemize
+\newcommand{\bitem}[0]{\begin{itemize}\itemsep0pt }
+\newcommand{\eitem}[0]{\end{itemize}}
+\newcommand{\sitem}[1]{\bitem \item{#1} \eitem}
+\newcommand{\bolditem}[2]{\item \textbf{#1} #2}
+\newcommand{\sbolditem}[2]{\bitem \bolditem{#1} #2 \eitem}
+\newcommand{\emitem}[2]{\item \emph{#1} #2}
+\newcommand{\citem}[2]{\item\code{#1} #2}
+\newcommand{\citemm}[1]{\item\code{#1}}
+\newcommand{\scitem}[2]{\bitem \citem{#1}{#2} \eitem}
+
+% description
+\newcommand{\bdesc}[0]{\begin{description}\itemsep0pt }
+\newcommand{\edesc}[0]{\end{description}}
+\newcommand{\ditem}[2]{\item[#1] #2}
+\newcommand{\deitem}[3]{\item[#1] \emph{#2} #3}
+
+% enumerate
+\newcommand{\benum}[0]{\begin{enumerate}\itemsep0pt }
+\newcommand{\eenum}[0]{\end{enumerate}}
+\newcommand{\bfi}[2]{\item \textbf{#1} #2}
+
+% coding
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\codei}[1]{\emph{#1}}
+\newcommand{\codeb}[1]{\textbf{#1}}
+\newcommand{\cindent}[0]{\indent\hspace{5pt}}
+\newcommand{\nocindent}[0]{\hspace{-5pt}}
+\newcommand{\NULL}[0]{\code{NULL}}
+
+% right arrow
+\newcommand{\ra}[0]{$\Rightarrow$}
+
+\newcommand{\tb}[1]{\textbf{#1}}
+
+
