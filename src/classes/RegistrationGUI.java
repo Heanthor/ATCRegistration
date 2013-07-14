@@ -141,7 +141,7 @@ public class RegistrationGUI {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("506px:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("190px"),
+				ColumnSpec.decode("250px"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -153,7 +153,7 @@ public class RegistrationGUI {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("250px"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("140px:grow"),
+				ColumnSpec.decode("150px:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -245,6 +245,10 @@ public class RegistrationGUI {
 				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -395,7 +399,16 @@ public class RegistrationGUI {
 				pv.showSummary ();
 			}
 		});
-		panel_1.add(btnGetSummary, "2, 38");
+		
+		JButton payAndSend = new JButton("Mark as Paid & Send E-Ticket");
+		payAndSend.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pv.markAsPaidAndSendETicket(getSelectedRegistrants ());
+			}
+		});
+		panel_1.add(payAndSend, "2, 38");
+		panel_1.add(btnGetSummary, "2, 42");
 		
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addMouseListener(new MouseAdapter() {
@@ -404,7 +417,7 @@ public class RegistrationGUI {
 				pv.refresh ();
 			}
 		});
-		panel_1.add(btnRefresh, "2, 42");
+		panel_1.add(btnRefresh, "2, 46");
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(SheetClientMode.values()));
@@ -413,7 +426,7 @@ public class RegistrationGUI {
 				pv.changeSheetClientMode ((SheetClientMode) comboBox.getSelectedItem ());
 			}
 		});
-		panel_1.add(comboBox, "2, 46, fill, default");
+		panel_1.add(comboBox, "2, 50, fill, default");
 		
 		comboBox_1 = new JComboBox();
 		comboBox_1.setModel(new DefaultComboBoxModel(RegistrationMode.values()));
@@ -422,7 +435,7 @@ public class RegistrationGUI {
 				pv.changeRegistrationMode ((RegistrationMode) comboBox_1.getSelectedItem ());
 			}
 		});
-		panel_1.add(comboBox_1, "2, 50, fill, default");
+		panel_1.add(comboBox_1, "2, 54, fill, default");
 	}
 	
 	/**

@@ -198,6 +198,11 @@ public class PaymentValidator {
 		refresh ();
 	}
 	
+	public void markAsPaidAndSendETicket(List<Registrant> regList) {
+		markAsPaid(regList);
+		sendETickets(regList);
+	}
+	
 	/**
 	 * shows a summary in the GUI of some statistics for all the registrants 
 	 */
