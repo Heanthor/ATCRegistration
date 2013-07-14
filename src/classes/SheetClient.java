@@ -60,16 +60,15 @@ public class SheetClient {
 	 * @param ai
 	 * @param scMode
 	 */
-	public SheetClient (AccountInformation ai, SheetClientMode scMode) {
+	public SheetClient (AccountInformation ai, SheetClientMode scMode, RegistrationMode regisMode) {
 		this.ai = ai;
+		this.regisMode = regisMode;
 		
 		service = new SpreadsheetService ("Terrapin Tango Festival");
 		factory = FeedURLFactory.getDefault();
 		
 		login ();
 
-		regisMode = RegistrationMode.EARLY_REGISTRATION;
-		
 		// get spreadsheet
 		SpreadsheetEntry spreadsheet = getSpreadsheet ();
 		if (spreadsheet == null)

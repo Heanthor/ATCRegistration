@@ -37,7 +37,6 @@ public class Constants {
 	public static final int CELL_FEED_LAST_COL = ETICKET_COL;
 
 	/* E-TICKET CONSTANTS */
-	public static final String ETICKET_FILE = "files/tango-eticket-2013.png";
 	public static final int ETICKET_FIRST_NAME_X = 105;
 	public static final int ETICKET_FIRST_NAME_Y = 112;;
 	public static final int ETICKET_LAST_NAME_X = 531;
@@ -50,18 +49,7 @@ public class Constants {
 	public static final float ETICKET_LARGE_FONT_SIZE = 30f;
 	public static final float ETICKET_SMALL_FONT_SIZE = 20f;
 	
-	/* EMAIL CONSTANTS */
-	public static final String EMAIL_ETICKET_SUBJECT = "Terrapin Tango Festival E-Ticket";
-	public static final String EMAIL_ETICKET_BODY_FILE = "files/ticketEmail.html";
-	public static final String EMAIL_PRE_FESTIVAL_BODY_FILE = "files/preFestival.html";
-	public static final String EMAIL_THANK_YOU_BODY_FILE = "files/thankYouEmail.html";
-	
 	/* ARRAY OF STRINGS TO FILTER CLASSES WITH: SHOULD ALL BE LOWER CASE */
 	// the filtering is used when pulling classes from the spreadsheet online
 	public static final String CLASS_FILTER_STRINGS[] = {"none", "carte"};
-	
-	/* FESTIVAL INFORMATION FILE */
-	public static final String FESTIVAL_XML_FILE = "files/festivalClasses.xml";
-	public static final String FESTIVAL_USER_INFORMATION_FILE = "files/userInfo.txt";
-	public static final double TAX = 0.03;
 }
