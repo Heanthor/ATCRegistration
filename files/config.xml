@@ -1,0 +1,22 @@
+<!-- 
+	DO NOT MOVE THIS FILE
+	feel free to edit it though
+-->
+<Configuration>
+	<eTicketEmail>
+		<EmailSubject>Terrapin Tango Festival E-Ticket</EmailSubject>
+		<EmailBodyFile>files/media/ticketEmail.html</EmailBodyFile>
+	</eTicketEmail>
+	<PreFestivalEmail>
+		<EmailSubject>Pre-Festival Information from ATC</EmailSubject>
+		<EmailBodyFile>files/media/preFestivalEmail.html</EmailBodyFile>
+	</PreFestivalEmail>
+	<ThankYouEmail>
+		<EmailSubject>Thank You from ATC</EmailSubject>
+		<EmailBodyFile>files/media/thankYouEmail.html</EmailBodyFile>
+	</ThankYouEmail>
+	<eTicketFile>files/media/tango-eticket-2013.png</eTicketFile>
+	<FestivalClassesFile>files/info/festivalClasses.xml</FestivalClassesFile>
+	<AccountInfoFile>files/info/accountInfo.xml</AccountInfoFile>
+	<TaxPercent>3</TaxPercent>
+</Configuration>
