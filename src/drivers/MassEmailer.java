@@ -58,13 +58,10 @@ public class MassEmailer {
 	}
 	
 	private static void help() {
-		System.out.println("Usage: java -jar <mass emailer jar> [email type number] [Registration type number]\n\n" +
+		System.out.println("Usage: java -jar <mass emailer jar> [email type number]\n\n" +
 						   "Email type number: \n" +
 						   "   1: Prefestival Email\n" +
-						   "   2: Thank You Email\n" +
-						   "Registration type number: \n" +
-						   "   1: Early Registration\n" +
-						   "   2: Late Registration\n");
+						   "   2: Thank You Email\n");
 		System.exit(-1);
 	}
 	
