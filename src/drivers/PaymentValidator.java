@@ -3,12 +3,12 @@ package drivers;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.Configuration;
 import classes.ETicketMaker;
 import classes.Emailer;
 import classes.RegistrationGUI;
 import classes.SheetClient;
 import datastructures.AccountInformation;
-import datastructures.Constants;
 import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
@@ -46,23 +46,26 @@ public class PaymentValidator {
 	
 	private volatile Emailer emailer;
 	private volatile ETicketMaker eticketMaker;
+	private volatile Configuration config;
 	
 	public static void main (String args[]) {
-		PaymentValidator pv = new PaymentValidator (Constants.FESTIVAL_USER_INFORMATION_FILE);
+		Configuration config = new Configuration();
+		PaymentValidator pv = new PaymentValidator (config);
 		RegistrationGUI gui = new RegistrationGUI (pv);
 		
 		pv.setGUI (gui);
 		pv.showAllRegistrants ();
 	}
 	
-	public PaymentValidator (String userInfoFile) {
-		ai = new AccountInformation (userInfoFile);
-		sc = new SheetClient (ai, SheetClientMode.FORM_SITE);
+	public PaymentValidator (Configuration config) {
+		this.config = config;
+		ai = config.getAccountInformation();
+		sc = new SheetClient (ai, SheetClientMode.FORM_SITE, RegistrationMode.EARLY_REGISTRATION);
 		sc.refresh ();
 		gui = null;
 		
 		emailer = new Emailer (ai.userName, ai.passwd);
-		eticketMaker = new ETicketMaker (Constants.ETICKET_FILE, "etickets");
+		eticketMaker = new ETicketMaker (config.getETicketFile(), "etickets");
 	}
 	
 	/**
@@ -182,8 +185,8 @@ public class PaymentValidator {
 			
 			// create email
 			emailer.resetEmail ();
-			emailer.setSubjectLine (Constants.EMAIL_ETICKET_SUBJECT);
-			emailer.setBodyFile (Constants.EMAIL_ETICKET_BODY_FILE);
+			emailer.setSubjectLine (config.getEmailSubject(Configuration.EmailType.ETICKET));
+			emailer.setBodyFile (config.getEmailBodyFile(Configuration.EmailType.ETICKET));
 			emailer.addRecipient (reg.email);
 //			emailer.addRecipient ("benjamyn.ward@gmail.com");
 			emailer.addAttachment (eTicketFile);

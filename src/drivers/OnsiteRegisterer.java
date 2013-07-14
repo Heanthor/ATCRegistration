@@ -6,12 +6,12 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import classes.Configuration;
 import classes.ETicketMaker;
 import classes.Emailer;
 import classes.OnsiteRegistrationGUI;
 import classes.SheetClient;
 import datastructures.AccountInformation;
-import datastructures.Constants;
 import datastructures.Enums.FestivalDay;
 import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
@@ -35,7 +35,8 @@ import datastructures.festival.Prices.SpecialPass;
 public class OnsiteRegisterer {
 	// MAIN
 	public static void main (String args[]) {
-		OnsiteRegisterer or = new OnsiteRegisterer (Constants.FESTIVAL_USER_INFORMATION_FILE);
+		Configuration config = new Configuration();
+		OnsiteRegisterer or = new OnsiteRegisterer (config);
 		OnsiteRegistrationGUI gui = new OnsiteRegistrationGUI (or);
 		or.setGUI (gui);
 	}
@@ -49,16 +50,18 @@ public class OnsiteRegisterer {
 	private volatile Emailer emailer;
 	private volatile ETicketMaker eticketMaker;
 	
-	public OnsiteRegisterer (String userInfoFile) {
-		ai = new AccountInformation (userInfoFile);
-		sc = new SheetClient (ai, SheetClientMode.ON_SITE);
-		sc.setRegistrationMode (RegistrationMode.LATE_REGISTRATION);
+	private volatile Configuration config;
+	
+	public OnsiteRegisterer (Configuration config) {
+		this.config = config;
+		ai = config.getAccountInformation();
+		sc = new SheetClient (ai, SheetClientMode.ON_SITE, RegistrationMode.LATE_REGISTRATION);
 		gui = null;
 		
-		festival = new Festival (Constants.FESTIVAL_XML_FILE);
+		festival = new Festival (config.getFestivalClassesFile());
 		
 		emailer = new Emailer (ai.userName, ai.passwd);
-		eticketMaker = new ETicketMaker (Constants.ETICKET_FILE, "etickets");
+		eticketMaker = new ETicketMaker (config.getETicketFile(), "etickets");
 	}
 
 	/**
@@ -171,7 +174,7 @@ public class OnsiteRegisterer {
 			}
 		}
 		
-		gui.updateTotalCost (totalCost, Constants.TAX * totalCost);
+		gui.updateTotalCost (totalCost, config.getTaxPercent() / 100. * totalCost);
 	}
 	
 	/**
@@ -193,8 +196,8 @@ public class OnsiteRegisterer {
 			
 			// create email
 			emailer.resetEmail ();
-			emailer.setSubjectLine (Constants.EMAIL_ETICKET_SUBJECT);
-			emailer.setBodyFile (Constants.EMAIL_ETICKET_BODY_FILE);
+			emailer.setSubjectLine (config.getEmailSubject(Configuration.EmailType.ETICKET));
+			emailer.setBodyFile (config.getEmailBodyFile(Configuration.EmailType.ETICKET));
 			emailer.addRecipient (newReg.email);
 //			emailer.addRecipient ("benjamyn.ward@gmail.com");
 			emailer.addAttachment (eTicketFile);

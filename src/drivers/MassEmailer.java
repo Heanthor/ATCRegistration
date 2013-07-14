@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import classes.Configuration;
+import classes.Configuration.EmailType;
 import classes.Emailer;
 import classes.SheetClient;
 import datastructures.AccountInformation;
-import datastructures.Constants;
+import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
 
@@ -27,14 +29,43 @@ import datastructures.Registrant;
 public class MassEmailer {
 	
 	public static void main (String args[]) {
-//		String emailBodyFile = "files/thankYouEmail.html";
-//		String subjectLine = "Thank you from ATC";
-		String emailBodyFile = "files/preFestival.html";
-		String subjectLine = "Pre-Festival Information from ATC";
+		if (args.length != 1) {
+			help();
+		}
 		
-		MassEmailer me = new MassEmailer (Constants.FESTIVAL_USER_INFORMATION_FILE);
-		me.setUpMassEmail (emailBodyFile, subjectLine);
-		me.sendEmails ();
+		int emailInt = Integer.parseInt(args[0]);
+		
+		if (! (emailInt == 1 || emailInt == 2)) {
+			help();
+		}
+		else {
+			Configuration config = new Configuration();
+			EmailType eType = emailInt == 1 ? EmailType.PREFESTIVAL : EmailType.THANK_YOU;
+			
+			String subjectLine = config.getEmailSubject(eType);
+			String emailBodyFile = config.getEmailBodyFile(eType);
+			
+			// set to early registrants
+			MassEmailer me = new MassEmailer (config, RegistrationMode.EARLY_REGISTRATION);
+			me.setUpMassEmail (emailBodyFile, subjectLine);
+			me.sendEmails ();
+
+			// set to late registrants
+			me.setRegistrationMode(RegistrationMode.LATE_REGISTRATION);
+			me.setUpMassEmail (emailBodyFile, subjectLine);
+			me.sendEmails ();
+		}
+	}
+	
+	private static void help() {
+		System.out.println("Usage: java -jar <mass emailer jar> [email type number] [Registration type number]\n\n" +
+						   "Email type number: \n" +
+						   "   1: Prefestival Email\n" +
+						   "   2: Thank You Email\n" +
+						   "Registration type number: \n" +
+						   "   1: Early Registration\n" +
+						   "   2: Late Registration\n");
+		System.exit(-1);
 	}
 	
 	private AccountInformation ai;
@@ -46,9 +77,9 @@ public class MassEmailer {
 	 * 
 	 * @param userInfoFile
 	 */
-	public MassEmailer (String userInfoFile) {
-		ai = new AccountInformation (userInfoFile);
-		sc = new SheetClient (ai, SheetClientMode.FORM_SITE);
+	public MassEmailer (Configuration config, RegistrationMode regMode) {
+		ai = config.getAccountInformation();
+		sc = new SheetClient (ai, SheetClientMode.FORM_SITE, regMode);
 		sc.refresh ();
 		emailer = new Emailer (ai.userName, ai.passwd);
 	}
@@ -119,5 +150,9 @@ public class MassEmailer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void setRegistrationMode(RegistrationMode regMode) {
+		sc.setRegistrationMode(regMode);
 	}
 }
