@@ -1,16 +1,9 @@
 package classes;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import datastructures.Enums;
 import datastructures.Enums.FestivalDay;
@@ -38,19 +31,8 @@ public class FestivalXMLParser {
 	private Element festivalEle;
 	
 	public FestivalXMLParser (String filename) {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		Document dom = null;
-		
-		try {
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			dom = db.parse(filename);
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		// get root element ("Festival")
-		festivalEle = dom.getDocumentElement();
+		festivalEle = XmlParserHelper.getRootElement(filename);
 	}
 	
 	/**
@@ -61,12 +43,8 @@ public class FestivalXMLParser {
 	 */
 	public Event[] getEvents (int numEvents) {
 		// get "Events" tag
-		NodeList eventsList = festivalEle.getElementsByTagName("Events");
-		if (eventsList.getLength() != 1)
-			throw new AtcErr ("Number of \"Events\" tags not one");
-		
+		Element eventsEle = XmlParserHelper.getSingleElement(festivalEle, "Events");
 		Event[] eventArr = new Event[numEvents];
-		Element eventsEle = (Element) eventsList.item(0);
 		
 		// get list of "Event" nodes
 		NodeList eventList = eventsEle.getElementsByTagName("Event");
@@ -102,16 +80,12 @@ public class FestivalXMLParser {
 	 * @return
 	 */
 	private SimpleDate parseEventDate (Element eventEle) {
-		NodeList dateList = eventEle.getElementsByTagName("Date");
-		if (dateList.getLength() != 1)
-			throw new AtcErr ("Invalid number of \"Date\" tags for event");
-		
-		Element dateEle = (Element) dateList.item(0);
+		Element dateEle = XmlParserHelper.getSingleElement(eventEle, "Date");
 		
 		// get week day
-		String weekDay = getContent (dateEle, "WeekDay");
-		int day = getContentInteger (dateEle, "Day");
-		String month = getContent (dateEle, "Month");
+		String weekDay = XmlParserHelper.getContent (dateEle, "WeekDay");
+		int day = XmlParserHelper.getContentInteger (dateEle, "Day");
+		String month = XmlParserHelper.getContent (dateEle, "Month");
 		
 		return new SimpleDate (weekDay, day, month);
 	}
@@ -124,12 +98,7 @@ public class FestivalXMLParser {
 	 */
 	private ArrayList<Class> parseEventClasses (Element eventEle) {
 		ArrayList<Class> classes = new ArrayList<Class>();
-		
-		NodeList classesList = eventEle.getElementsByTagName("Classes");
-		if (classesList.getLength() != 1)
-			throw new AtcErr ("Invalid number of \"Classes\" tags for event");
-		
-		Element classesEle = (Element) classesList.item(0);
+		Element classesEle = XmlParserHelper.getSingleElement(eventEle, "Classes");
 		
 		// get list of classes
 		NodeList classList = classesEle.getElementsByTagName("Class");
@@ -140,9 +109,9 @@ public class FestivalXMLParser {
 	}
 	
 	private Class parseEventClass (Element classEle) {
-		return new Class (getContent (classEle, "Name"), getContent (classEle, "Teachers"),
-				          getContent (classEle, "Level"), getContentInteger (classEle, "StartTime"),
-				          getContentInteger (classEle, "EndTime"), getContent (classEle, "Room"));
+		return new Class (XmlParserHelper.getContent (classEle, "Name"), XmlParserHelper.getContent (classEle, "Teachers"),
+				          XmlParserHelper.getContent (classEle, "Level"), XmlParserHelper.getContentInteger (classEle, "StartTime"),
+				          XmlParserHelper.getContentInteger (classEle, "EndTime"), XmlParserHelper.getContent (classEle, "Room"));
 	}
 	
 	/**
@@ -152,41 +121,11 @@ public class FestivalXMLParser {
 	 * @return
 	 */
 	private Milonga parseEventMilonga (Element eventEle) {
-		NodeList milongaList = eventEle.getElementsByTagName("Milonga");
-		if (milongaList.getLength() != 1)
-			throw new AtcErr ("Invalid number of \"Milonga\" tags for event");
+		Element milongaEle = XmlParserHelper.getSingleElement(eventEle, "Milonga");
 		
-		Element milongaEle = (Element) milongaList.item(0);
-		
-		return new Milonga (getContent (milongaEle, "Name"),
-				getContentInteger (milongaEle, "StartTime"),
-				getContentInteger (milongaEle, "EndTime"));
-	}
-	
-	/**
-	 * Helper method to quickly get String content
-	 * 
-	 * @param e
-	 * @param tag
-	 * @return
-	 */
-	private String getContent (Element e, String tag) {
-		NodeList nl = e.getElementsByTagName(tag);
-		if (nl.getLength() != 1)
-			throw new AtcErr ("Expecting only a single tag with tag name: " + tag + ": " + nl.getLength());
-		
-		return nl.item(0).getTextContent();
-	}
-
-	/**
-	 * Helper method to quickly get Integer content
-	 * 
-	 * @param e
-	 * @param tag
-	 * @return
-	 */
-	private int getContentInteger (Element e, String tag) {
-		return Integer.parseInt(getContent (e, tag));
+		return new Milonga (XmlParserHelper.getContent (milongaEle, "Name"),
+				XmlParserHelper.getContentInteger (milongaEle, "StartTime"),
+				XmlParserHelper.getContentInteger (milongaEle, "EndTime"));
 	}
 	
 	/**
@@ -197,37 +136,24 @@ public class FestivalXMLParser {
 	 */
 	public Prices getPrices (StudentType studentType) {
 		// get "Prices" tag
-		NodeList pricesList = festivalEle.getElementsByTagName("Prices");
-		if (pricesList.getLength() != 1)
-			throw new AtcErr ("Unexpected number of \"Prices\" tags, expected only 1: " +
-								pricesList.getLength());
-		
-		Element pricesEle = (Element) pricesList.item(0);
+		Element pricesEle = XmlParserHelper.getSingleElement(festivalEle, "Prices");
 		
 		// get the desired student type
-		NodeList studentTypeList = pricesEle.getElementsByTagName(Enums.StudentTypeXMLTags[studentType.ordinal()]);
-		if (studentTypeList.getLength() != 1)
-			throw new AtcErr ("Unexpected number of student type elements, expected only 1: " + 
-								studentTypeList.getLength());
-		
-		Element studentTypeEle = (Element) studentTypeList.item(0);
-		Prices prices = new Prices (studentType, getContentInteger (studentTypeEle, "SingleClass"));
+		Element studentTypeEle = XmlParserHelper.getSingleElement(pricesEle, Enums.StudentTypeXMLTags[studentType.ordinal()]);
+
+		Prices prices = new Prices (studentType, XmlParserHelper.getContentInteger (studentTypeEle, "SingleClass"));
 		prices.addSpecialPasses(parseSpecialPasses(studentTypeEle));
 		prices.addMilongaPrices(parseMilongaPrices(studentTypeEle));
 		
 		return prices;
 	}
-	
+
 	private ArrayList<SpecialPass> parseSpecialPasses (Element studentTypeEle) {
 		ArrayList<SpecialPass> sps = new ArrayList <SpecialPass> ();
 		
-		NodeList spsList = studentTypeEle.getElementsByTagName("SpecialPasses");
-		if (spsList.getLength() != 1)
-			throw new AtcErr ("Unexpected number of \"SpecialPasses\" tags, expect 1: " + spsList.getLength());
-		
-		Element spsEle = (Element) spsList.item(0);
+		Element spsEle = XmlParserHelper.getSingleElement(studentTypeEle, "SpecialPasses");
 		for (SpecialPassType spt : Enums.SpecialPassType.values())
-			sps.add (new SpecialPass (spt, getContentInteger (spsEle, Enums.SpecialPassTypeXMLTags[spt.ordinal()])));
+			sps.add (new SpecialPass (spt, XmlParserHelper.getContentInteger (spsEle, Enums.SpecialPassTypeXMLTags[spt.ordinal()])));
 		
 		return sps;
 	}
@@ -235,13 +161,9 @@ public class FestivalXMLParser {
 	private ArrayList<MilongaPrice> parseMilongaPrices (Element studentTypeEle) {
 		ArrayList<MilongaPrice> mps = new ArrayList <MilongaPrice> ();
 		
-		NodeList mpsList = studentTypeEle.getElementsByTagName("Milongas");
-		if (mpsList.getLength() != 1)
-			throw new AtcErr ("Unexpected number of \"Milongas\" tags, expect 1: " + mpsList.getLength());
-		
-		Element mpsEle = (Element) mpsList.item(0);
+		Element mpsEle = XmlParserHelper.getSingleElement(studentTypeEle, "Milongas");
 		for (FestivalDay day : Enums.FestivalDay.values())
-			mps.add (new MilongaPrice (day, getContentInteger (mpsEle, Enums.MilongaDayXMLTags[day.ordinal()])));
+			mps.add (new MilongaPrice (day, XmlParserHelper.getContentInteger (mpsEle, Enums.MilongaDayXMLTags[day.ordinal()])));
 		
 		return mps;
 	}
