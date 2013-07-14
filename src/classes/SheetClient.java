@@ -111,9 +111,9 @@ public class SheetClient {
 	/**
 	 * This function updates the local spreadsheet information for
 	 * the given registration mode (even if it is the same as the 
-	 * current mode)
+	 * current mode). The local information is refreshed and updated.
 	 * 
-	 * @param mode
+	 * @param regMode registration mode to set the sheet client to
 	 */
 	public void setRegistrationMode(RegistrationMode regMode) {
 		this.regisMode = regMode;

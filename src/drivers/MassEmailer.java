@@ -75,7 +75,8 @@ public class MassEmailer {
 	/**
 	 * Sets up the account information, spreadsheet, and emailing features
 	 * 
-	 * @param userInfoFile
+	 * @param config Configuration object containing the meta-data
+	 * @param regMode registration mode to start the SheetClient in
 	 */
 	public MassEmailer (Configuration config, RegistrationMode regMode) {
 		ai = config.getAccountInformation();

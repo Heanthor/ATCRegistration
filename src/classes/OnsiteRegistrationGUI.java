@@ -276,7 +276,7 @@ public class OnsiteRegistrationGUI {
 	 * to the rows, this function returns the appropriate RowSpec array for their
 	 * arrangement
 	 * 
-	 * @return
+	 * @return a RowSpec array for the arrangement of the labels and text boxes in the GUI
 	 */
 	private RowSpec[] getInformationRowSpec () {
 			return new RowSpec[] {

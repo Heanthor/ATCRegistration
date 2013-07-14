@@ -60,8 +60,8 @@ public class FestivalXMLParser {
 	/**
 	 * Reads the next event from the given node and returns an Event object
 	 * 
-	 * @param eventEle
-	 * @return
+	 * @param eventEle XML element of a "Event" tag
+	 * @return Event object representing a single day of festival events
 	 */
 	private Event parseNextEvent (Element eventEle) {
 		Event event = new Event();
@@ -76,8 +76,9 @@ public class FestivalXMLParser {
 	/**
 	 * Parses the "Date" tag in the Element object, putting the date
 	 * into the Event object.
-	 * @param eventEle
-	 * @return
+	 * 
+	 * @param eventEle XML element of a "Event" tag
+	 * @return date of the event
 	 */
 	private SimpleDate parseEventDate (Element eventEle) {
 		Element dateEle = XmlParserHelper.getSingleElement(eventEle, "Date");
@@ -93,8 +94,10 @@ public class FestivalXMLParser {
 	/**
 	 * Parses the "Classes" tag in the Element object, putting the classes
 	 * into the Event object.
-	 * @param eventEle
-	 * @return
+	 * 
+	 * @param eventEle XML element of a "Event" tag
+	 * @return a list of Class objects, which contain information about them 
+	 *         for that festival day
 	 */
 	private ArrayList<Class> parseEventClasses (Element eventEle) {
 		ArrayList<Class> classes = new ArrayList<Class>();
@@ -117,8 +120,9 @@ public class FestivalXMLParser {
 	/**
 	 * Parses the "Milonga" tag in the Element object, putting the milonga
 	 * into the Event object.
-	 * @param eventEle
-	 * @return
+	 * 
+	 * @param eventEle XML element of a "Event" tag
+	 * @return a Milonga object containing information about the milonga for that day
 	 */
 	private Milonga parseEventMilonga (Element eventEle) {
 		Element milongaEle = XmlParserHelper.getSingleElement(eventEle, "Milonga");
@@ -147,7 +151,14 @@ public class FestivalXMLParser {
 		
 		return prices;
 	}
-
+	
+	/**
+	 * Get a list of special passes given an XML element that contains a 
+	 * "SpecialPasses" XML element. See @{link Enums.SpecialPassTypeXMLTags}.
+	 * 
+	 * @param studentTypeEle XML Element node that contains the special pass XML tags
+	 * @return List of SpecialPass objects
+	 */
 	private ArrayList<SpecialPass> parseSpecialPasses (Element studentTypeEle) {
 		ArrayList<SpecialPass> sps = new ArrayList <SpecialPass> ();
 		
@@ -158,10 +169,17 @@ public class FestivalXMLParser {
 		return sps;
 	}
 	
-	private ArrayList<MilongaPrice> parseMilongaPrices (Element studentTypeEle) {
+	/**
+	 * Get a list of milonga prices given an XML element that contains a 
+	 * "Milongas" XML element. See @{link Enums.SpecialPassTypeXMLTags}.
+	 * 
+	 * @param milongasNode
+	 * @return List of MilongaPrice objects
+	 */
+	private ArrayList<MilongaPrice> parseMilongaPrices (Element milongasNode) {
 		ArrayList<MilongaPrice> mps = new ArrayList <MilongaPrice> ();
 		
-		Element mpsEle = XmlParserHelper.getSingleElement(studentTypeEle, "Milongas");
+		Element mpsEle = XmlParserHelper.getSingleElement(milongasNode, "Milongas");
 		for (FestivalDay day : Enums.FestivalDay.values())
 			mps.add (new MilongaPrice (day, XmlParserHelper.getContentInteger (mpsEle, Enums.MilongaDayXMLTags[day.ordinal()])));
 		

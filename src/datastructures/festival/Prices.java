@@ -18,10 +18,6 @@ import datastructures.Enums.StudentType;
  * @author benjamyn
  *
  */
-/**
- * @author benjamyn
- *
- */
 public class Prices {
 	/**
 	 * A class that represents a Special Pass ticket such
@@ -102,12 +98,18 @@ public class Prices {
 	
 	/**
 	 * Returns the cost of a single class
+	 * 
 	 * @return the cost of a single class
 	 */
 	public int getSingleClassCost () {
 		return singleClassCost;
 	}
 	
+	/**
+	 * Add/overwrite a SpecialPass for this Prices object
+	 * 
+	 * @param sp SpecialPass to add
+	 */
 	public void addSpecialPass (SpecialPass sp) {
 		int index = specialPasses.indexOf(sp);
 		
@@ -117,11 +119,15 @@ public class Prices {
 			specialPasses.set(index, sp);
 	}
 	
+	/**
+	 * Add/overwrite a set of SpecialPass's for this Prices object
+	 * 
+	 * @param sps Collection of SpecialPass's to add
+	 */
 	public void addSpecialPasses (Collection<SpecialPass> sps) {
 		for (SpecialPass sp : sps)
 			addSpecialPass (sp);
 	}
-	
 	
 	/**
 	 * Used to get the SpecialPass associated with the student
@@ -139,6 +145,11 @@ public class Prices {
 		throw new AtcErr ("Could not find special pass type: " + passType);
 	}
 	
+	/**
+	 * Add/overwrite a MilongaPrice for this Prices object
+	 * 
+	 * @param mp MilongaPrice to add
+	 */
 	public void addMilongaPrice (MilongaPrice mp) {
 		int index = milongaPrices.indexOf(mp);
 		
@@ -148,6 +159,11 @@ public class Prices {
 			milongaPrices.set(index, mp);
 	}
 	
+	/**
+	 * Add/overwrite a set of MilongaPrice's for this Prices object
+	 * 
+	 * @param mps Collection of MilongaPrice's to add
+	 */
 	public void addMilongaPrices (Collection<MilongaPrice> mps) {
 		for (MilongaPrice mp : mps)
 			addMilongaPrice (mp);

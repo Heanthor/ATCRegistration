@@ -19,6 +19,13 @@ import org.xml.sax.SAXException;
  */
 public class XmlParserHelper {
 
+	/**
+	 * Given the path to an XML file, open the file and return the XML 
+	 * root element
+	 * 
+	 * @param filename path to an XML file
+	 * @return root element of the XML document
+	 */
 	public static Element getRootElement(String filename) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		Document dom = null;
@@ -34,6 +41,14 @@ public class XmlParserHelper {
 		return dom.getDocumentElement();
 	}
 
+	/**
+	 * Get the value of an element contained in an XML element. The tag must 
+	 * appear only once.
+	 * 
+	 * @param ele higher level XML element that contains the desired element
+	 * @param tag tag of the element in the higher level element
+	 * @return element with the given tag
+	 */
 	public static Element getSingleElement(Element ele, String tag) {
 		NodeList nlist = ele.getElementsByTagName(tag);
 		if (nlist.getLength() != 1)
@@ -45,9 +60,9 @@ public class XmlParserHelper {
 	/**
 	 * Helper method to quickly get String content
 	 * 
-	 * @param e
-	 * @param tag
-	 * @return
+	 * @param e element containing the tag with the string content
+	 * @param tag XML tag of the element containing the string content
+	 * @return string in the XML element
 	 */
 	public static String getContent (Element e, String tag) {
 		NodeList nl = e.getElementsByTagName(tag);
@@ -60,9 +75,9 @@ public class XmlParserHelper {
 	/**
 	 * Helper method to quickly get Integer content
 	 * 
-	 * @param e
-	 * @param tag
-	 * @return
+	 * @param e element containing the tag with the string content
+	 * @param tag XML tag of the element containing the string content
+	 * @return integer in the XML element
 	 */
 	public static int getContentInteger (Element e, String tag) {
 		return Integer.parseInt(getContent (e, tag));

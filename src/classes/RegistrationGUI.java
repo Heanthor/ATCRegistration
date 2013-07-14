@@ -428,7 +428,7 @@ public class RegistrationGUI {
 	/**
 	 * Returns all the registrants currently known by the GUI
 	 * 
-	 * @return
+	 * @return all registrants listed in the GUI
 	 */
 	private List<Registrant> getAllRegistrantsList () {
 		return (List<Registrant>) allRegistrants.clone ();
@@ -440,7 +440,7 @@ public class RegistrationGUI {
 	 * {@see #getAllRegistrantsList()} due to filtering that
 	 * has been applied to the list.
 	 * 
-	 * @return
+	 * @return all registrants in the listed after the GUI filter is applied
 	 */
 	private List<Registrant> getCurrentRegistrantList () {
 		ArrayList <Registrant> regList = new ArrayList <Registrant> (dlm.size());
@@ -451,6 +451,11 @@ public class RegistrationGUI {
 		return regList;
 	}
 	
+	/**
+	 * Get a list of registrants that have been selected by the user.
+	 * 
+	 * @return a list of selected registrants
+	 */
 	private List<Registrant> getSelectedRegistrants () {
 		List<RegistrantWrapper> selectedReg = list.getSelectedValuesList ();
 		
@@ -461,6 +466,9 @@ public class RegistrationGUI {
 		return regList;
 	}
 	
+	/**
+	 * Clear the list of registrants in the gui
+	 */
 	private void clearRegistrantList () {
 		dlm.clear ();
 	}
