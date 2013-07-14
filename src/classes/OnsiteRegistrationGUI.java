@@ -354,6 +354,8 @@ public class OnsiteRegistrationGUI {
 		comboBox_2.setSelectedIndex (0);
 		comboBox_3.setSelectedIndex (0);
 		comboBox_4.setSelectedIndex (0);
+		
+		cTree.clearChecking();
 	}
 	
 	/**

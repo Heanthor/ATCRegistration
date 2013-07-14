@@ -205,6 +205,7 @@ public class OnsiteRegisterer {
 		}
 		
 		sc.pushNewRegistrant (newReg);
+		newRegistrant();
 	}
 	
 	private Registrant createRegistrant () {

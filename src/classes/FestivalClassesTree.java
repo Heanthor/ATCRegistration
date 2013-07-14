@@ -180,4 +180,11 @@ public class FestivalClassesTree {
 		// models start in a collapsed state, thus we need to re-expand
 		tree.expandAll ();
 	}
+	
+	/**
+	 * Clear all the special passes/milonagas/classes that have been selected
+	 */
+	public void clearChecking() {
+		tree.clearChecking();
+	}
 }
