@@ -48,7 +48,9 @@ public class MassEmailer {
 			// set to early registrants
 			MassEmailer me = new MassEmailer (config, RegistrationMode.EARLY_REGISTRATION);
 			me.setUpMassEmail (emailBodyFile, subjectLine);
-			me.sendEmails ();
+			if (!me.sendEmails ()) {
+                return;
+            }
 
 			// set to late registrants
 			me.setRegistrationMode(RegistrationMode.LATE_REGISTRATION);
@@ -110,8 +112,10 @@ public class MassEmailer {
 	/**
 	 * Sends out the emails after verifying with the user that it is really
 	 * what they want to do.
+     *
+     * @return true if emails were sent, false otherwise
 	 */
-	public void sendEmails () {
+	public boolean sendEmails () {
 		BufferedReader br = new BufferedReader (new InputStreamReader (System.in));
 		// print the email information
 		System.out.println (emailer + "\n");
@@ -122,7 +126,7 @@ public class MassEmailer {
 			
 			if (input.compareTo ("Y") != 0) {
 				System.out.println ("NOT SENDING EMAIL");
-				return;
+				return false;
 			}
 
 			System.out.println ("*** ARE YOU __REALLY__ SURE YOU WANT TO SEND THESE EMAILS (Y/N)?");
@@ -130,7 +134,7 @@ public class MassEmailer {
 			
 			if (input.compareTo ("Y") != 0) {
 				System.out.println ("NOT SENDING EMAIL");
-				return;
+				return false;
 			}
 
 			System.out.println ("*** I'M ONLY GOING TO ASK YOU ONE MORE TIME (Y/N)?");
@@ -138,16 +142,17 @@ public class MassEmailer {
 			
 			if (input.compareTo ("Y") != 0) {
 				System.out.println ("NOT SENDING EMAIL");
-				return;
+				return false;
 			}
 
 			System.out.println ("Okay, I'm sending those emails then...........");
 			emailer.sendEmail ();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+        return true;
 	}
 
 	public void setRegistrationMode(RegistrationMode regMode) {
