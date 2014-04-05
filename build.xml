@@ -1,0 +1,133 @@
+<project default="fatties">
+    <property name="lib.dir" value="lib"/>
+    <property name="src.dir" value="src"/>
+    <property name="classes.dir" value="bin/classes"/>
+    <property name="jar.dir" value="bin/jar"/>
+
+    <!-- name of dynamically compiled jar: need to specify class path to run this jar -->
+    <property name="dynamic.jar" value="atcfestival.jar"/>
+    <property name="static.onsite.jar" value="onsite.jar"/>
+    <property name="static.payment.jar" value="payment.jar"/>
+    <property name="static.emailer.jar" value="emailer.jar"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+
+    <!-- targets -->
+    <target name="fatties" depends="jar-fat-onsite,jar-fat-payment,jar-fat-emailer"/>
+
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+
+    <!-- compiling and running the dynamic jars -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${dynamic.jar}" basedir="${classes.dir}"/>
+    </target>
+
+    <target name="run-onsite" depends="jar">
+        <java classname="drivers.OnsiteRegisterer" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${dynamic.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-payment" depends="jar">
+        <java classname="drivers.PaymentValidator" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${dynamic.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-emailer" depends="jar">
+        <java classname="drivers.MassEmailer" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${dynamic.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- building the "fat" jars, which include all the jars needed to run the program -->
+    <target name="jar-fat-onsite" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${static.onsite.jar}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="drivers.OnsiteRegisterer"/>
+            </manifest>
+            <restrict>
+                <not>
+                    <or>
+                        <name name="**/*.RSA"/>
+                        <name name="**/*.SF"/>
+                        <name name="**/*.DSA"/>
+                    </or>
+                </not>
+                <archives>
+                    <zips>
+                        <fileset dir="lib" includes="**/*.jar"/>
+                    </zips>
+                </archives>
+            </restrict>
+        </jar>
+    </target>
+
+    <target name="jar-fat-payment" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${static.payment.jar}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="drivers.PaymentValidator"/>
+            </manifest>
+            <restrict>
+                <not>
+                    <or>
+                        <name name="**/*.RSA"/>
+                        <name name="**/*.SF"/>
+                        <name name="**/*.DSA"/>
+                    </or>
+                </not>
+                <archives>
+                    <zips>
+                        <fileset dir="lib" includes="**/*.jar"/>
+                    </zips>
+                </archives>
+            </restrict>
+        </jar>
+    </target>
+
+    <target name="jar-fat-emailer" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${static.emailer.jar}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="drivers.MassEmailer"/>
+            </manifest>
+            <restrict>
+                <not>
+                    <or>
+                        <name name="**/*.RSA"/>
+                        <name name="**/*.SF"/>
+                        <name name="**/*.DSA"/>
+                    </or>
+                </not>
+                <archives>
+                    <zips>
+                        <fileset dir="lib" includes="**/*.jar"/>
+                    </zips>
+                </archives>
+            </restrict>
+        </jar>
+    </target>
+
+</project>
