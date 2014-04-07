@@ -2,20 +2,22 @@ package datastructures;
 
 /**
  * Immutable name class to hold first and last name.
- * 
- * @author benjamyn
  *
+ * @author benjamyn
  */
-public class Name {
-	public final String first;
-	public final String last;
-	
-	public Name (String first, String last) {
-		this.first = first;
-		this.last = last;
-	}
-	
-	public String toString () {
-		return last + ", " + first;
-	}
+public class Name
+{
+    public final String first;
+    public final String last;
+
+    public Name(String first, String last)
+    {
+        this.first = first;
+        this.last = last;
+    }
+
+    public String toString()
+    {
+        return last + ", " + first;
+    }
 }
