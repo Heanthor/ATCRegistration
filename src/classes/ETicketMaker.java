@@ -58,7 +58,7 @@ public class ETicketMaker
             g.drawString(name.last, Constants.ETICKET_LAST_NAME_X, Constants.ETICKET_LAST_NAME_Y);
 
             // draw ticket type
-            g.drawString(Enums.ETicketStudentType[studentType.ordinal()], Constants.ETICKET_STUDENT_TYPE_X, Constants.ETICKET_STUDENT_TYPE_Y);
+            g.drawString(studentType.toString(), Constants.ETICKET_STUDENT_TYPE_X, Constants.ETICKET_STUDENT_TYPE_Y);
 
             // draw list of classes
             g.setFont(g.getFont().deriveFont(Constants.ETICKET_SMALL_FONT_SIZE)); // decrease font size

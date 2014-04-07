@@ -5,6 +5,11 @@
 .settings/org.eclipse.jdt.ui.prefs
 
 ################################################################################
+# IntelliJ workspace file
+#
+.idea/workspace.xml
+
+################################################################################
 # User information: should not be checked in
 #
 **/accountInfo.xml
@@ -17,7 +22,6 @@ outs
 emailer.jar
 onsite.jar
 payment.jar
-
 
 ################################################################################
 # README artifacts

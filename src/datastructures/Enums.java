@@ -12,20 +12,52 @@ import classes.AtcErr;
  */
 public class Enums
 {
-    /*
-     * A bunch of enum declarations to sort out various registrant types
-     */
-    public enum TicketStatus
-    {
-        CONFIRMED,
-        UNCONFIRMED
-    }
-
     public enum StudentType
     {
-        UMD_GMU_STUDENT,
-        OTHER_STUDENT,
+        UMD_STUDENT
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "UmdGmuStudent";
+                    }
+
+                    @Override
+                    public String toString()
+                    {
+                        return "UMD Student";
+                    }
+                },
+        OTHER_STUDENT
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "OtherStudent";
+                    }
+
+                    @Override
+                    public String toString()
+                    {
+                        return "Other Student";
+                    }
+                },
         GENERAL_ADMISSION
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "GeneralAdmission";
+                    }
+
+                    @Override
+                    public String toString()
+                    {
+                        return "General Admission";
+                    }
+                };
+
+        public abstract String getXmlTag();
     }
 
     public enum DancerType
@@ -44,25 +76,87 @@ public class Enums
     /* used for mapping day # to week day */
     public enum FestivalDay
     {
-        FRIDAY,
-        SATURDAY,
-        SUNDAY;
+        FRIDAY
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "Friday";
+                    }
+                },
+        SATURDAY
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "Saturday";
+                    }
+                },
+        SUNDAY
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "Sunday";
+                    }
+                };
+
+        public abstract String getXmlTag();
     }
+
 
     /* special pass mappings */
     public enum SpecialPassType
     {
-        FULL_PASS,
-        FRIDAY_PASS,
-        SATURDAY_PASS,
-        SUNDAY_PASS,
+        FULL_PASS
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "FullPass";
+                    }
+                },
+        FRIDAY_PASS
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "FridayPass";
+                    }
+                },
+        SATURDAY_PASS
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "SaturdayPass";
+                    }
+                },
+        SUNDAY_PASS
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "SundayPass";
+                    }
+                },
         MILONGA_PASS
+                {
+                    @Override
+                    public String getXmlTag()
+                    {
+                        return "MilongaPass";
+                    }
+                };
+
+        public abstract String getXmlTag();
     }
+
 
     public enum SheetClientMode
     {
         FORM_SITE,
-        ON_SITE;
+        ON_SITE
     }
 
     public enum RegistrationMode
@@ -70,24 +164,6 @@ public class Enums
         EARLY_REGISTRATION,
         LATE_REGISTRATION
     }
-
-	/* Strings used with the XML document to parse from string to enum types */
-
-    /* works in conjuction with the StudentType enum */
-    public static final String StudentTypeXMLTags[] = {"UmdGmuStudent", "OtherStudent", "GeneralAdmission"};
-
-    /* works in conjuction with the SpecialPassType enum */
-    public static final String SpecialPassTypeXMLTags[] = {"FullPass", "FridayPass", "SaturdayPass", "SundayPass", "MilongaPass"};
-
-    /* works in conjuction with the FestivalDay enum */
-    public static final String MilongaDayXMLTags[] = {"Friday", "Saturday", "Sunday"};
-
-	
-	/* Strings used for the ETicket, namely the "Ticket Type" field */
-
-    /* works in conjuction with the StudentType enum */
-    public static final String ETicketStudentType[] = {"UMD/GMU Student", "Other Student", "General Admission"};
-
 
     /* Yes/No enum for working with the On-Site registration buttons */
     public enum YesNo
@@ -102,7 +178,7 @@ public class Enums
      * student type. This function works by searching the input string for the
      * word (case insensitive):
      * <ol>
-     * <li>UMD_GMU_STUDENT: look for word "UMD"</li>
+     * <li>UMD_STUDENT: look for word "UMD"</li>
      * <li>OTHER_STUDENT: look for word "other"</li>
      * <li>GENERAL_ADMISSION: look for word "general"</li>
      * </ol>
@@ -119,10 +195,10 @@ public class Enums
     {
         if (sType == null || sType.compareTo("") == 0)
             return null;
-        else if (sType.toLowerCase().contains("umd"))
-            return StudentType.UMD_GMU_STUDENT;
-        else if (sType.toLowerCase().contains("other"))
+        else if (sType.toLowerCase().contains("non-umd"))
             return StudentType.OTHER_STUDENT;
+        else if (sType.toLowerCase().contains("umd"))
+            return StudentType.UMD_STUDENT;
         else if (sType.toLowerCase().contains("general"))
             return StudentType.GENERAL_ADMISSION;
         else

@@ -151,7 +151,7 @@ public class FestivalXMLParser
         Element pricesEle = XmlParserHelper.getSingleElement(festivalEle, "Prices");
 
         // get the desired student type
-        Element studentTypeEle = XmlParserHelper.getSingleElement(pricesEle, Enums.StudentTypeXMLTags[studentType.ordinal()]);
+        Element studentTypeEle = XmlParserHelper.getSingleElement(pricesEle, studentType.getXmlTag());
 
         Prices prices = new Prices(studentType, XmlParserHelper.getContentInteger(studentTypeEle, "SingleClass"));
         prices.addSpecialPasses(parseSpecialPasses(studentTypeEle));
@@ -173,7 +173,7 @@ public class FestivalXMLParser
 
         Element spsEle = XmlParserHelper.getSingleElement(studentTypeEle, "SpecialPasses");
         for (SpecialPassType spt : Enums.SpecialPassType.values())
-            sps.add(new SpecialPass(spt, XmlParserHelper.getContentInteger(spsEle, Enums.SpecialPassTypeXMLTags[spt.ordinal()])));
+            sps.add(new SpecialPass(spt, XmlParserHelper.getContentInteger(spsEle, spt.getXmlTag())));
 
         return sps;
     }
@@ -191,7 +191,7 @@ public class FestivalXMLParser
 
         Element mpsEle = XmlParserHelper.getSingleElement(milongasNode, "Milongas");
         for (FestivalDay day : Enums.FestivalDay.values())
-            mps.add(new MilongaPrice(day, XmlParserHelper.getContentInteger(mpsEle, Enums.MilongaDayXMLTags[day.ordinal()])));
+            mps.add(new MilongaPrice(day, XmlParserHelper.getContentInteger(mpsEle, day.getXmlTag())));
 
         return mps;
     }
