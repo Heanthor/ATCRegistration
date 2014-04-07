@@ -656,6 +656,7 @@ public class RegistrationGUI
                        + spacing + "Dancer Type: " + reg.dancerType + "\n"
                        + spacing + "Experience Level: " + reg.expLvl + "\n"
                        + spacing + "Amount: " + reg.amount + "\n"
+                       + spacing + "Num Registrants: " + reg.numRegistrants + "\n"
                        + spacing + "Paid: " + reg.hasPaid() + "\n"
                        + spacing + "ETicket Sent: " + reg.hasEticketSent() + "\n"
                        + spacing + "Classes: \n";

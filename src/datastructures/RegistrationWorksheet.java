@@ -39,6 +39,7 @@ public class RegistrationWorksheet
     private ArrayList<CellEntry> completedRegCol;
     private ArrayList<CellEntry> paymentRcvdCol;
     private ArrayList<CellEntry> eticketCol;
+    private ArrayList<CellEntry> numRegistrantsCol;
 
     // this one is a bit different. It is used for querying the
     // classes for a specific row
@@ -60,6 +61,7 @@ public class RegistrationWorksheet
         completedRegCol = new ArrayList<CellEntry>();
         paymentRcvdCol = new ArrayList<CellEntry>();
         eticketCol = new ArrayList<CellEntry>();
+        numRegistrantsCol= new ArrayList<CellEntry>();
     }
 
     /**
@@ -112,6 +114,8 @@ public class RegistrationWorksheet
         paymentRcvdCol.ensureCapacity(numRows);
         eticketCol.clear();
         eticketCol.ensureCapacity(numRows);
+        numRegistrantsCol.clear();
+        numRegistrantsCol.ensureCapacity(numRows);
         classRows.clear();
         classRows.ensureCapacity(numRows);
 
@@ -164,6 +168,8 @@ public class RegistrationWorksheet
                 case Constants.ETICKET_COL:
                     eticketCol.add(entry);
                     break;
+                case Constants.NUMBER_REGISTRANTS_COL:
+                    numRegistrantsCol.add(entry);
                 default:
                     // check if in class range
                     if (Constants.CLASS_MIN_COL <= currentCol && currentCol <= Constants.CLASS_MAX_COL)
@@ -219,16 +225,16 @@ public class RegistrationWorksheet
                     amnt = Double.parseDouble(amntString.replace("$", ""));
 
                 // payment and eticket sent has a default value of <false>
-                Registrant reg = new Registrant(
-                                                       amountCol.get(i).getCell().getRow(),
-                                                       firstNameCol.get(i).getCell().getInputValue(),
-                                                       lastNameCol.get(i).getCell().getInputValue(),
-                                                       emailCol.get(i).getCell().getInputValue(),
-                                                       phoneCol.get(i).getCell().getInputValue(),
-                                                       Enums.stringToStudentType(studentTypeCol.get(i).getCell().getInputValue()),
-                                                       Enums.stringToDancerType(dancerTypeCol.get(i).getCell().getInputValue()),
-                                                       Enums.stringToExperienceLevel(expLvlCol.get(i).getCell().getInputValue()),
-                                                       amnt);
+                Registrant reg = new Registrant(amountCol.get(i).getCell().getRow(),
+                                                firstNameCol.get(i).getCell().getInputValue(),
+                                                lastNameCol.get(i).getCell().getInputValue(),
+                                                emailCol.get(i).getCell().getInputValue(),
+                                                phoneCol.get(i).getCell().getInputValue(),
+                                                Enums.stringToStudentType(studentTypeCol.get(i).getCell().getInputValue()),
+                                                Enums.stringToDancerType(dancerTypeCol.get(i).getCell().getInputValue()),
+                                                Enums.stringToExperienceLevel(expLvlCol.get(i).getCell().getInputValue()),
+                                                amnt,
+                                                numRegistrantsCol.get(i).getCell().getInputValue());
 
                 if (paymentRcvdString != null && paymentRcvdString.compareTo(Constants.PAYMENT_RECEIVED) == 0)
                     reg.setPaid(true);

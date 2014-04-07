@@ -226,17 +226,16 @@ public class OnsiteRegisterer
 
     private Registrant createRegistrant()
     {
-        Registrant reg = new Registrant(
-                                               sc.getNumWorksheetRows() + 1,
-                                               gui.getFirstName(),
-                                               gui.getLastName(),
-                                               gui.getEmail(),
-                                               gui.getPhoneNumber(),
-                                               gui.getStudentStatus(),
-                                               gui.getDancerType(),
-                                               gui.getExperienceLevel(),
-                                               gui.getTotal()
-        );
+        Registrant reg = new Registrant(sc.getNumWorksheetRows() + 1,
+                                        gui.getFirstName(),
+                                        gui.getLastName(),
+                                        gui.getEmail(),
+                                        gui.getPhoneNumber(),
+                                        gui.getStudentStatus(),
+                                        gui.getDancerType(),
+                                        gui.getExperienceLevel(),
+                                        gui.getTotal(),
+                                        gui.getNumRegistrants());
 
         if (gui.getPaymentReceived() == YesNo.YES)
             reg.setPaid(true);

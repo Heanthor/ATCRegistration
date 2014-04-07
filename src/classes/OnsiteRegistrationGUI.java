@@ -48,11 +48,11 @@ public class OnsiteRegistrationGUI
     private JTextField textField_1; // last name
     private JTextField textField_2; // email
     private JTextField textField_3; // phone number
-    private JComboBox  comboBox;     // student status
-    private JComboBox  comboBox_1;   // dancer type
-    private JComboBox  comboBox_2;   // experience level
-    private JComboBox  comboBox_3;   // payment received?
-    private JComboBox  comboBox_4;   // send eticket?
+    private JComboBox  comboBox;    // student status
+    private JComboBox  comboBox_1;  // dancer type
+    private JComboBox  comboBox_2;  // experience level
+    private JComboBox  comboBox_3;  // payment received?
+    private JComboBox  comboBox_4;  // send eticket?
     private JTextField textField_4; // subtotal
     private JTextField textField_5; // tax
     private JTextField textField_6; // total
@@ -461,6 +461,11 @@ public class OnsiteRegistrationGUI
     public double getTotal()
     {
         return Double.parseDouble(textField_6.getText().replace("$", ""));
+    }
+
+    public String getNumRegistrants()
+    {
+        return "FOOBAR";
     }
 
     public List<String> getListOfClasses()

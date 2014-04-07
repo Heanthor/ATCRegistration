@@ -23,13 +23,22 @@ public class Registrant implements Comparable<Registrant>
     public final DancerType      dancerType;
     public final ExperienceLevel expLvl;
     public final double          amount;
+    public final String          numRegistrants;
 
     private ArrayList<String> classes;
     private boolean           paid;
     private boolean           eticketSent;
 
-    public Registrant(int row, String firstName, String lastName, String email, String phone,
-                      StudentType studentType, DancerType dancerType, ExperienceLevel expLvl, double amount)
+    public Registrant(int row,
+                      String firstName,
+                      String lastName,
+                      String email,
+                      String phone,
+                      StudentType studentType,
+                      DancerType dancerType,
+                      ExperienceLevel expLvl,
+                      double amount,
+                      String numRegistrants)
     {
         this.row = row;
         this.name = new Name(firstName, lastName);
@@ -39,6 +48,7 @@ public class Registrant implements Comparable<Registrant>
         this.dancerType = dancerType;
         this.expLvl = expLvl;
         this.amount = amount;
+        this.numRegistrants = numRegistrants;
 
         classes = new ArrayList<String>();
         paid = eticketSent = false;
