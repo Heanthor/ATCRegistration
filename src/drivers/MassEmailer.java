@@ -1,10 +1,9 @@
 package drivers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.awt.*;
 import java.util.List;
 
+import classes.AtcErr;
 import classes.Configuration;
 import classes.Configuration.EmailType;
 import classes.Emailer;
@@ -13,6 +12,8 @@ import datastructures.AccountInformation;
 import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
+
+import javax.swing.*;
 
 /**
  * This program sents out a mass email to each of the paid registrants in
@@ -27,50 +28,65 @@ import datastructures.Registrant;
  */
 public class MassEmailer
 {
+    private static enum EmailerOptions
+    {
+        PRE_FESTIVAL
+                {
+                    @Override
+                    public String toString()
+                    {
+                        return "Pre-Festival";
+                    }
+
+                    @Override
+                    EmailType getEmailType()
+                    {
+                        return EmailType.PREFESTIVAL;
+                    }
+                },
+        THANK_YOU
+                {
+                    @Override
+                    public String toString()
+                    {
+                        return "Thank You";
+                    }
+
+                    @Override
+                    EmailType getEmailType()
+                    {
+                        return EmailType.THANK_YOU;
+                    }
+                };
+
+        abstract EmailType getEmailType();
+    }
 
     public static void main(String args[])
     {
-        if (args.length != 1)
+        int res = JOptionPane.showOptionDialog(null, "Do you want to send the pre-festival or thank-you email?",
+                                               "What would you like to do?", JOptionPane.DEFAULT_OPTION,
+                                               JOptionPane.QUESTION_MESSAGE, null,
+                                               EmailerOptions.values(), null);
+
+        Configuration config = new Configuration();
+        EmailType eType = EmailerOptions.values()[res].getEmailType();
+
+        String subjectLine = config.getEmailSubject(eType);
+        String emailBodyFile = config.getEmailBodyFile(eType);
+
+        // set to early registrants
+        MassEmailer me = new MassEmailer(config, RegistrationMode.EARLY_REGISTRATION);
+        me.setUpMassEmail(emailBodyFile, subjectLine);
+        if (!me.sendEmails(RegistrationMode.EARLY_REGISTRATION))
         {
-            help();
+            AtcErr.createErrorDialog("Did not send the early registrants their emails");
         }
 
-        int emailInt = Integer.parseInt(args[0]);
-
-        if (!(emailInt == 1 || emailInt == 2))
-        {
-            help();
-        }
-        else
-        {
-            Configuration config = new Configuration();
-            EmailType eType = emailInt == 1 ? EmailType.PREFESTIVAL : EmailType.THANK_YOU;
-
-            String subjectLine = config.getEmailSubject(eType);
-            String emailBodyFile = config.getEmailBodyFile(eType);
-
-            // set to early registrants
-            MassEmailer me = new MassEmailer(config, RegistrationMode.EARLY_REGISTRATION);
-            me.setUpMassEmail(emailBodyFile, subjectLine);
-            if (!me.sendEmails())
-            {
-                return;
-            }
-
-            // set to late registrants
-            me.setRegistrationMode(RegistrationMode.LATE_REGISTRATION);
-            me.setUpMassEmail(emailBodyFile, subjectLine);
-            me.sendEmails();
-        }
-    }
-
-    private static void help()
-    {
-        System.out.println("Usage: java -jar <mass emailer jar> [email type number]\n\n" +
-                                   "Email type number: \n" +
-                                   "   1: Prefestival Email\n" +
-                                   "   2: Thank You Email\n");
-        System.exit(-1);
+        // set to late registrants
+        me.setRegistrationMode(RegistrationMode.LATE_REGISTRATION);
+        me.setUpMassEmail(emailBodyFile, subjectLine);
+        me.sendEmails(RegistrationMode.LATE_REGISTRATION);
     }
 
     private AccountInformation ai;
@@ -122,51 +138,43 @@ public class MassEmailer
      * what they want to do.
      *
      * @return true if emails were sent, false otherwise
+     * @param registrationMode
      */
-    public boolean sendEmails()
+    public boolean sendEmails(RegistrationMode registrationMode)
     {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // print the email information
-        System.out.println(emailer + "\n");
+        String msg = String.format("The email information that will be sent is for mode '%s': %s\n",
+                                   registrationMode, emailer);
+        JTextArea textArea = new JTextArea(msg);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        scrollPane.setPreferredSize(new Dimension(1000, 800));
 
-        try
+        int res = JOptionPane.showOptionDialog(null, scrollPane, "Email Contents", JOptionPane.OK_CANCEL_OPTION,
+                                               JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (res == JOptionPane.CANCEL_OPTION)
         {
-            System.out.println("*** ARE YOU SURE YOU WANT TO SEND THESE EMAILS (Y/N)?");
-            String input = br.readLine();
-
-            if (input.compareTo("Y") != 0)
-            {
-                System.out.println("NOT SENDING EMAIL");
-                return false;
-            }
-
-            System.out.println("*** ARE YOU __REALLY__ SURE YOU WANT TO SEND THESE EMAILS (Y/N)?");
-            input = br.readLine();
-
-            if (input.compareTo("Y") != 0)
-            {
-                System.out.println("NOT SENDING EMAIL");
-                return false;
-            }
-
-            System.out.println("*** I'M ONLY GOING TO ASK YOU ONE MORE TIME (Y/N)?");
-            input = br.readLine();
-
-            if (input.compareTo("Y") != 0)
-            {
-                System.out.println("NOT SENDING EMAIL");
-                return false;
-            }
-
-            System.out.println("Okay, I'm sending those emails then...........");
-            emailer.sendEmail();
+            AtcErr.createErrorDialog("Not sending emails.");
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
+        queryUserIfSure("ARE YOU SURE YOU WANT TO SEND THESE EMAILS?");
+        queryUserIfSure("ARE YOU __REALLY__ SURE YOU WANT TO SEND THESE EMAILS?");
+        queryUserIfSure("I'M ONLY GOING TO ASK YOU ONE MORE TIME!");
+
+        // Okay, I'm sending those emails then...........
+        emailer.sendEmail();
 
         return true;
+    }
+
+    private void queryUserIfSure(String msg)
+    {
+        int res = JOptionPane.showOptionDialog(null, msg, "Are you sure?", JOptionPane.OK_CANCEL_OPTION,
+                                               JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (res == JOptionPane.CANCEL_OPTION)
+        {
+            AtcErr.createErrorDialog("Not sending emails.");
+        }
     }
 
     public void setRegistrationMode(RegistrationMode regMode)

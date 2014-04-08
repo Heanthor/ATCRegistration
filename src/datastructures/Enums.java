@@ -39,7 +39,7 @@ public class Enums
                     @Override
                     public String toString()
                     {
-                        return "Other Student";
+                        return "Non-UMD Student";
                     }
                 },
         GENERAL_ADMISSION

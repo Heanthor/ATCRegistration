@@ -44,9 +44,9 @@ public class PaymentValidator
     private volatile SheetClient        sc;
     private volatile RegistrationGUI    gui;
 
-    private volatile Emailer       emailer;
-    private volatile ETicketMaker  eticketMaker;
-    private volatile Configuration config;
+    private volatile Emailer       m_emailer;
+    private volatile ETicketMaker  m_eTicketMaker;
+    private volatile Configuration m_config;
 
     public static void main(String args[])
     {
@@ -60,14 +60,14 @@ public class PaymentValidator
 
     public PaymentValidator(Configuration config)
     {
-        this.config = config;
+        this.m_config = config;
         ai = config.getAccountInformation();
         sc = new SheetClient(ai, SheetClientMode.FORM_SITE, RegistrationMode.EARLY_REGISTRATION);
         sc.refresh();
         gui = null;
 
-        emailer = new Emailer(ai.userName, ai.passwd);
-        eticketMaker = new ETicketMaker(config.getETicketFile(), "etickets");
+        m_emailer = new Emailer(ai.userName, ai.passwd);
+        m_eTicketMaker = new ETicketMaker(config.getETicketFile(), "etickets");
     }
 
     /**
@@ -186,27 +186,24 @@ public class PaymentValidator
         // make and send etickets
         for (Registrant reg : regList)
         {
-            // remove the "None" and empty string classes
-            ArrayList<String> trueClasses = new ArrayList<String>();
-            for (String regClass : reg.getFilteredClasses())
-                trueClasses.add(regClass);
+            // create email
+            m_emailer.resetEmail();
+            m_emailer.setSubjectLine(m_config.getEmailSubject(Configuration.EmailType.ETICKET));
+            m_emailer.setBodyFile(m_config.getEmailBodyFile(Configuration.EmailType.ETICKET));
+            m_emailer.addRecipient(reg.email);
 
             // create ticket
-            String eTicketFile = eticketMaker.createTicket(reg.name, reg.studentType, trueClasses);
-            if (null == eTicketFile)
+            List<String> filteredClasses = reg.getFilteredClasses();
+            String eTicketFile = m_eTicketMaker.createTicket(reg.name, reg.studentType, filteredClasses);
+            m_emailer.addAttachment(eTicketFile);
+
+            if (reg.hasSecondRegistrant())
             {
-                System.err.println("Could not create an e-ticket");
-                return;
+                String secondaryETicketFile = m_eTicketMaker.createTicket(reg.secondRegName, reg.studentType, filteredClasses);
+                m_emailer.addAttachment(secondaryETicketFile);
             }
 
-            // create email
-            emailer.resetEmail();
-            emailer.setSubjectLine(config.getEmailSubject(Configuration.EmailType.ETICKET));
-            emailer.setBodyFile(config.getEmailBodyFile(Configuration.EmailType.ETICKET));
-            emailer.addRecipient(reg.email);
-            //			emailer.addRecipient ("benjamyn.ward@gmail.com");
-            emailer.addAttachment(eTicketFile);
-            emailer.sendEmail();
+            m_emailer.sendEmail();
         }
 
         // mark etickets in spreadsheet as sent

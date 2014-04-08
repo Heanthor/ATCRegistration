@@ -3,7 +3,8 @@ package classes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.activation.*;
@@ -28,12 +29,12 @@ public class Emailer
     private Session   session;
     private Transport transport;
 
-    private ArrayList<String> recipients = new ArrayList<String>();
+    private List<String> recipients = new LinkedList<>();
     private String subject;
     private String bodyFile;
-    private ArrayList<String> attachments     = new ArrayList<String>();
-    private boolean           sendAttachments = true;
-    private boolean           separateEmails  = false;
+    private List<String> attachments     = new LinkedList<String>();
+    private boolean      sendAttachments = true;
+    private boolean      separateEmails  = false;
 
     /**
      * Initializes the mailing parameters, readying the object
