@@ -1,7 +1,8 @@
 package datastructures;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import datastructures.Enums.*;
 
@@ -23,11 +24,11 @@ public class Registrant implements Comparable<Registrant>
     public final DancerType      dancerType;
     public final ExperienceLevel expLvl;
     public final double          amount;
-    public final String          numRegistrants;
+    public final int             numRegistrants;
+    public final boolean         eticketSent;
+    public final Name            secondRegName;
 
-    private ArrayList<String> classes;
-    private boolean           paid;
-    private boolean           eticketSent;
+    private final List<String> m_classes;
 
     public Registrant(int row,
                       String firstName,
@@ -38,7 +39,11 @@ public class Registrant implements Comparable<Registrant>
                       DancerType dancerType,
                       ExperienceLevel expLvl,
                       double amount,
-                      String numRegistrants)
+                      int numRegistrants,
+                      List<String> classes,
+                      boolean eticketSent,
+                      String secondRegistrantFirstName,
+                      String secondRegistrantLastName)
     {
         this.row = row;
         this.name = new Name(firstName, lastName);
@@ -49,19 +54,10 @@ public class Registrant implements Comparable<Registrant>
         this.expLvl = expLvl;
         this.amount = amount;
         this.numRegistrants = numRegistrants;
+        this.eticketSent = eticketSent;
+        this.secondRegName = new Name(secondRegistrantFirstName, secondRegistrantLastName);
 
-        classes = new ArrayList<String>();
-        paid = eticketSent = false;
-    }
-
-    public boolean hasPaid()
-    {
-        return paid;
-    }
-
-    public void setPaid(boolean paid)
-    {
-        this.paid = paid;
+        m_classes = classes;
     }
 
     public boolean hasEticketSent()
@@ -69,22 +65,9 @@ public class Registrant implements Comparable<Registrant>
         return eticketSent;
     }
 
-    public void setEticketSent(boolean eticketSent)
+    public boolean hasSecondRegistrant()
     {
-        this.eticketSent = eticketSent;
-    }
-
-    public void addClass(String cl)
-    {
-        classes.add(cl);
-    }
-
-    public void addClasses(Collection<String> cls)
-    {
-        classes.ensureCapacity(classes.size() + cls.size());
-
-        for (String cl : cls)
-            classes.add(cl);
+        return this.secondRegName.first != null && this.secondRegName.last != null;
     }
 
     /**
@@ -96,9 +79,9 @@ public class Registrant implements Comparable<Registrant>
      *
      * @return list of unfiltered classes
      */
-    public ArrayList<String> getAllClasses()
+    public List<String> getAllClasses()
     {
-        return (ArrayList<String>) classes.clone();
+        return new ArrayList<>(m_classes);
     }
 
     /**
@@ -108,11 +91,11 @@ public class Registrant implements Comparable<Registrant>
      *
      * @return a list of classes which pass through the filter
      */
-    public ArrayList<String> getFilteredClasses()
+    public List<String> getFilteredClasses()
     {
-        ArrayList<String> filteredClasses = new ArrayList<String>();
+        List<String> filteredClasses = new LinkedList<>();
 
-        for (String cl : classes)
+        for (String cl : m_classes)
         {
             boolean shouldFilterIt = false;
             for (String filterString : Constants.CLASS_FILTER_STRINGS)
@@ -129,6 +112,7 @@ public class Registrant implements Comparable<Registrant>
         return filteredClasses;
     }
 
+    @Override
     public String toString()
     {
         return "{" + name + ", " + email + ", " + phone + ", "

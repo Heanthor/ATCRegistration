@@ -168,8 +168,8 @@ public class Enums
     /* Yes/No enum for working with the On-Site registration buttons */
     public enum YesNo
     {
-        NO,
-        YES
+        YES,
+        NO
     }
 
 

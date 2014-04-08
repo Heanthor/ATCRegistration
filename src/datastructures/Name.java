@@ -16,6 +16,7 @@ public class Name
         this.last = last;
     }
 
+    @Override
     public String toString()
     {
         return last + ", " + first;

@@ -2,6 +2,8 @@ package datastructures;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
@@ -40,6 +42,8 @@ public class RegistrationWorksheet
     private ArrayList<CellEntry> paymentRcvdCol;
     private ArrayList<CellEntry> eticketCol;
     private ArrayList<CellEntry> numRegistrantsCol;
+    private ArrayList<CellEntry> secondRegFirstNameCol;
+    private ArrayList<CellEntry> secondRegLastNameCol;
 
     // this one is a bit different. It is used for querying the
     // classes for a specific row
@@ -50,18 +54,20 @@ public class RegistrationWorksheet
 
     public RegistrationWorksheet()
     {
-        amountCol = new ArrayList<CellEntry>();
-        firstNameCol = new ArrayList<CellEntry>();
-        lastNameCol = new ArrayList<CellEntry>();
-        emailCol = new ArrayList<CellEntry>();
-        phoneCol = new ArrayList<CellEntry>();
-        studentTypeCol = new ArrayList<CellEntry>();
-        dancerTypeCol = new ArrayList<CellEntry>();
-        expLvlCol = new ArrayList<CellEntry>();
-        completedRegCol = new ArrayList<CellEntry>();
-        paymentRcvdCol = new ArrayList<CellEntry>();
-        eticketCol = new ArrayList<CellEntry>();
-        numRegistrantsCol= new ArrayList<CellEntry>();
+        amountCol = new ArrayList<>();
+        firstNameCol = new ArrayList<>();
+        lastNameCol = new ArrayList<>();
+        emailCol = new ArrayList<>();
+        phoneCol = new ArrayList<>();
+        studentTypeCol = new ArrayList<>();
+        dancerTypeCol = new ArrayList<>();
+        expLvlCol = new ArrayList<>();
+        completedRegCol = new ArrayList<>();
+        paymentRcvdCol = new ArrayList<>();
+        eticketCol = new ArrayList<>();
+        numRegistrantsCol= new ArrayList<>();
+        secondRegFirstNameCol = new ArrayList<>();
+        secondRegLastNameCol = new ArrayList<>();
     }
 
     /**
@@ -116,6 +122,10 @@ public class RegistrationWorksheet
         eticketCol.ensureCapacity(numRows);
         numRegistrantsCol.clear();
         numRegistrantsCol.ensureCapacity(numRows);
+        secondRegFirstNameCol.clear();
+        secondRegFirstNameCol.ensureCapacity(numRows);
+        secondRegLastNameCol.clear();
+        secondRegLastNameCol.ensureCapacity(numRows);
         classRows.clear();
         classRows.ensureCapacity(numRows);
 
@@ -170,6 +180,10 @@ public class RegistrationWorksheet
                     break;
                 case Constants.NUMBER_REGISTRANTS_COL:
                     numRegistrantsCol.add(entry);
+                case Constants.SECOND_REGISTRANT_FIRST_NAME_COL:
+                    secondRegFirstNameCol.add(entry);
+                case Constants.SECOND_REGISTRANT_LAST_NAME_COL:
+                    secondRegLastNameCol.add(entry);
                 default:
                     // check if in class range
                     if (Constants.CLASS_MIN_COL <= currentCol && currentCol <= Constants.CLASS_MAX_COL)
@@ -210,19 +224,34 @@ public class RegistrationWorksheet
      */
     private ArrayList<Registrant> getRegistrantsBasedOnPayment(PaymentParser pp)
     {
-        ArrayList<Registrant> regs = new ArrayList<Registrant>(amountCol.size());
+        ArrayList<Registrant> regs = new ArrayList<>(amountCol.size());
 
         int numRegs = amountCol.size();
         for (int i = 0; i < numRegs; ++i)
         {
-            String paymentRcvdString = paymentRcvdCol.get(i).getCell().getInputValue();
+            String eticketSentEntry = eticketCol.get(i).getCell().getInputValue();
 
-            if (pp.shouldAddRegistrant(paymentRcvdString))
+            if (pp.shouldAddRegistrant(eticketSentEntry))
             {
                 String amntString = amountCol.get(i).getCell().getInputValue();
                 double amnt = 0;
                 if (amntString != null && amntString.compareTo("") != 0)
+                {
                     amnt = Double.parseDouble(amntString.replace("$", ""));
+                }
+
+                String eticketString = eticketCol.get(i).getCell().getInputValue();
+                boolean isEticketSent = eticketString != null && eticketString.compareTo(Constants.ETICKET_SENT) == 0;
+
+                List<String> classes = new LinkedList<>();
+                for (CellEntry ce : classRows.get(i))
+                {
+                    String regClass = ce.getCell().getInputValue();
+
+                    // could have empty cells
+                    if (regClass != null && regClass.trim().compareTo("") != 0)
+                        classes.add(regClass);
+                }
 
                 // payment and eticket sent has a default value of <false>
                 Registrant reg = new Registrant(amountCol.get(i).getCell().getRow(),
@@ -234,24 +263,11 @@ public class RegistrationWorksheet
                                                 Enums.stringToDancerType(dancerTypeCol.get(i).getCell().getInputValue()),
                                                 Enums.stringToExperienceLevel(expLvlCol.get(i).getCell().getInputValue()),
                                                 amnt,
-                                                numRegistrantsCol.get(i).getCell().getInputValue());
-
-                if (paymentRcvdString != null && paymentRcvdString.compareTo(Constants.PAYMENT_RECEIVED) == 0)
-                    reg.setPaid(true);
-
-                String eticketString = eticketCol.get(i).getCell().getInputValue();
-                if (eticketString != null && eticketString.compareTo(Constants.ETICKET_SENT) == 0)
-                    reg.setEticketSent(true);
-
-                for (CellEntry ce : classRows.get(i))
-                {
-                    String regClass = ce.getCell().getInputValue();
-
-                    // could have empty cells
-                    if (regClass != null && regClass.trim().compareTo("") != 0)
-                        reg.addClass(regClass);
-                }
-
+                                                Integer.parseInt(numRegistrantsCol.get(i).getCell().getInputValue()),
+                                                classes,
+                                                isEticketSent,
+                                                secondRegFirstNameCol.get(i).getCell().getInputValue(),
+                                                secondRegLastNameCol.get(i).getCell().getInputValue());
                 regs.add(reg);
             }
         }
@@ -267,36 +283,31 @@ public class RegistrationWorksheet
      */
     public ArrayList<Registrant> getAllRegistrants()
     {
-        return getRegistrantsBasedOnPayment(
-                                                   new PaymentParser()
-                                                   {
-                                                       public boolean shouldAddRegistrant(String paymentString)
-                                                       {
-                                                           return true;
-                                                       }
-                                                   }
+        return getRegistrantsBasedOnPayment(new PaymentParser()
+                                            {
+                                                public boolean shouldAddRegistrant(String paymentString)
+                                                {
+                                                    return true;
+                                                }
+                                            }
         );
     }
 
     /**
      * Returns all the paid registrants that are found in the current
-     * CellFeed
+     * CellFeed by checking if the eticket is sent
      *
      * @return all the paid registrants that are found in the current CellFeed
      */
     public ArrayList<Registrant> getPaidRegistrants()
     {
-        return getRegistrantsBasedOnPayment(
-                                                   new PaymentParser()
-                                                   {
-                                                       public boolean shouldAddRegistrant(String paymentString)
-                                                       {
-                                                           if (paymentString != null && paymentString.compareTo(Constants.PAYMENT_RECEIVED) == 0)
-                                                               return true;
-                                                           else
-                                                               return false;
-                                                       }
-                                                   }
+        return getRegistrantsBasedOnPayment(new PaymentParser()
+                                            {
+                                                public boolean shouldAddRegistrant(String eticketCellEntry)
+                                                {
+                                                    return eticketCellEntry != null && eticketCellEntry.compareTo(Constants.ETICKET_SENT) == 0;
+                                                }
+                                            }
         );
     }
 
@@ -308,17 +319,13 @@ public class RegistrationWorksheet
      */
     public ArrayList<Registrant> getUnpaidRegistrants()
     {
-        return getRegistrantsBasedOnPayment(
-                                                   new PaymentParser()
-                                                   {
-                                                       public boolean shouldAddRegistrant(String paymentString)
-                                                       {
-                                                           if (paymentString == null || paymentString.compareTo(Constants.PAYMENT_RECEIVED) != 0)
-                                                               return true;
-                                                           else
-                                                               return false;
-                                                       }
-                                                   }
+        return getRegistrantsBasedOnPayment(new PaymentParser()
+                                            {
+                                                public boolean shouldAddRegistrant(String eticketCellEntry)
+                                                {
+                                                    return eticketCellEntry == null || eticketCellEntry.compareTo(Constants.ETICKET_SENT) != 0;
+                                                }
+                                            }
         );
     }
 }

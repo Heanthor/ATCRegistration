@@ -29,7 +29,6 @@ public class Constants
     public static final int    COMPLETED_REGISTRANT_COL          = 74; // agreement col
     public static final int    PAYMENT_RECEIVED_COL              = 87;
     public static final int    ETICKET_COL                       = 88;
-    public static final String PAYMENT_RECEIVED                  = "x";
     public static final String ETICKET_SENT                      = "x";
 
     /* CELL FEED PARAMETERS NUMBERS */

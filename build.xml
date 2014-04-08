@@ -28,7 +28,7 @@
     </target>
 
     <!-- compiling and running the dynamic jars -->
-    <target name="jar" depends="compile">
+    <target name="jar" depends="clean,compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${dynamic.jar}" basedir="${classes.dir}"/>
     </target>

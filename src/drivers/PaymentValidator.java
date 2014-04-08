@@ -181,18 +181,6 @@ public class PaymentValidator
         gui.showRegistrantInformation(regList);
     }
 
-    public void markAsPaid(List<Registrant> regList)
-    {
-        sc.markAsPaid(regList);
-        refresh(); // refresh our local information
-    }
-
-    public void markAsUnpaid(List<Registrant> regList)
-    {
-        sc.markAsUnpaid(regList);
-        refresh(); // refresh our local information
-    }
-
     public void sendETickets(List<Registrant> regList)
     {
         // make and send etickets
@@ -224,12 +212,6 @@ public class PaymentValidator
         // mark etickets in spreadsheet as sent
         sc.markAsETicketSent(regList);
         refresh();
-    }
-
-    public void markAsPaidAndSendETicket(List<Registrant> regList)
-    {
-        markAsPaid(regList);
-        sendETickets(regList);
     }
 
     /**
@@ -266,7 +248,7 @@ public class PaymentValidator
         // populate statistics
         for (Registrant reg : regs)
         {
-            if (reg.hasPaid())
+            if (reg.hasEticketSent())
             {
                 ++numPaid;
 

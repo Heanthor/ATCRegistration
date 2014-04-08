@@ -1,6 +1,6 @@
 package drivers;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -42,28 +42,23 @@ public class OnsiteRegisterer
         or.setGUI(gui);
     }
 
-    private volatile AccountInformation    ai;
-    private volatile SheetClient           sc;
-    private volatile OnsiteRegistrationGUI gui;
-
-    private volatile Festival festival; // contains all the festival class and price information
-
-    private volatile Emailer      emailer;
-    private volatile ETicketMaker eticketMaker;
-
-    private volatile Configuration config;
+    private volatile AccountInformation    m_accountInformation;
+    private volatile SheetClient           m_sheetClient;
+    private volatile OnsiteRegistrationGUI m_gui;
+    private volatile Festival              m_festival; // contains all the festival class and price information
+    private volatile Emailer               m_emailer;
+    private volatile ETicketMaker          m_eTicketMaker;
+    private volatile Configuration         m_config;
 
     public OnsiteRegisterer(Configuration config)
     {
-        this.config = config;
-        ai = config.getAccountInformation();
-        sc = new SheetClient(ai, SheetClientMode.ON_SITE, RegistrationMode.LATE_REGISTRATION);
-        gui = null;
-
-        festival = new Festival(config.getFestivalClassesFile());
-
-        emailer = new Emailer(ai.userName, ai.passwd);
-        eticketMaker = new ETicketMaker(config.getETicketFile(), "etickets");
+        m_config = config;
+        m_accountInformation = config.getAccountInformation();
+        m_sheetClient = new SheetClient(m_accountInformation, SheetClientMode.ON_SITE, RegistrationMode.LATE_REGISTRATION);
+        m_gui = null;
+        m_festival = new Festival(config.getFestivalClassesFile());
+        m_emailer = new Emailer(m_accountInformation.userName, m_accountInformation.passwd);
+        m_eTicketMaker = new ETicketMaker(config.getETicketFile(), "etickets");
     }
 
     /**
@@ -74,25 +69,24 @@ public class OnsiteRegisterer
      */
     public void setGUI(OnsiteRegistrationGUI gui)
     {
-        this.gui = gui;
+        m_gui = gui;
     }
 
     /**
      * Clears the GUI's fields
      */
-    public void newRegistrant()
+    public void resetRegistrationGui()
     {
-        gui.resetFields();
+        m_gui.resetFields();
     }
 
     /**
      * updates the cost values found in the GUI for the checked leaves
      * in the tree and for the given student type
+     *  @param checkedLeaves list of leaves that have been checked
      *
-     * @param checkedLeaves list of leaves that have been checked
-     * @param st            student type for which to calculate the cost for
      */
-    public void updateTotalCost(List<DefaultMutableTreeNode> checkedLeaves, StudentType st)
+    public void updateTotalCost(List<DefaultMutableTreeNode> checkedLeaves)
     {
         double totalCost = 0;
 
@@ -188,7 +182,8 @@ public class OnsiteRegisterer
             }
         }
 
-        gui.updateTotalCost(totalCost, config.getTaxPercent() / 100. * totalCost);
+        totalCost *= m_gui.getNumRegistrants();
+        m_gui.updateTotalCost(totalCost, m_config.getTaxPercent() / 100. * totalCost);
     }
 
     /**
@@ -198,64 +193,71 @@ public class OnsiteRegisterer
     public void submit()
     {
         // check if we need to send an e-ticket
-        Registrant newReg = createRegistrant();
+        processNewRegistrant(createRegistrant());
+        resetRegistrationGui();
+    }
 
-        if (newReg.hasEticketSent())
+    private void processNewRegistrant(Registrant reg)
+    {
+        if (reg.hasEticketSent())
         {
-            // remove the "None" and empty string classes
-            ArrayList<String> trueClasses = new ArrayList<String>();
-            for (String regClass : newReg.getFilteredClasses())
-                trueClasses.add(regClass);
-
-            // create ticket
-            String eTicketFile = eticketMaker.createTicket(newReg.name, newReg.studentType, trueClasses);
-
-            // create email
-            emailer.resetEmail();
-            emailer.setSubjectLine(config.getEmailSubject(Configuration.EmailType.ETICKET));
-            emailer.setBodyFile(config.getEmailBodyFile(Configuration.EmailType.ETICKET));
-            emailer.addRecipient(newReg.email);
-            //			emailer.addRecipient ("benjamyn.ward@gmail.com");
-            emailer.addAttachment(eTicketFile);
-            emailer.sendEmail();
+            sendEticketForRegistrant(reg);
         }
 
-        sc.pushNewRegistrant(newReg);
-        newRegistrant();
+        m_sheetClient.pushNewRegistrant(reg);
+    }
+
+    private void sendEticketForRegistrant(Registrant reg)
+    {
+        // create email
+        m_emailer.resetEmail();
+        m_emailer.setSubjectLine(m_config.getEmailSubject(Configuration.EmailType.ETICKET));
+        m_emailer.setBodyFile(m_config.getEmailBodyFile(Configuration.EmailType.ETICKET));
+        m_emailer.addRecipient(reg.email);
+
+        // create ticket
+        List<String> filteredClasses = reg.getFilteredClasses();
+        String eTicketFile = m_eTicketMaker.createTicket(reg.name, reg.studentType, filteredClasses);
+        m_emailer.addAttachment(eTicketFile);
+
+        if (reg.hasSecondRegistrant())
+        {
+            String secondaryETicketFile = m_eTicketMaker.createTicket(reg.secondRegName, reg.studentType, filteredClasses);
+            m_emailer.addAttachment(secondaryETicketFile);
+        }
+
+        m_emailer.sendEmail();
     }
 
     private Registrant createRegistrant()
     {
-        Registrant reg = new Registrant(sc.getNumWorksheetRows() + 1,
-                                        gui.getFirstName(),
-                                        gui.getLastName(),
-                                        gui.getEmail(),
-                                        gui.getPhoneNumber(),
-                                        gui.getStudentStatus(),
-                                        gui.getDancerType(),
-                                        gui.getExperienceLevel(),
-                                        gui.getTotal(),
-                                        gui.getNumRegistrants());
-
-        if (gui.getPaymentReceived() == YesNo.YES)
-            reg.setPaid(true);
-
-        if (gui.getSendETicket() == YesNo.YES)
-            reg.setEticketSent(true);
-
         // get list of classes and milongas
-        for (DefaultMutableTreeNode node : gui.getCheckedList())
+        List<String> classes = new LinkedList<>();
+        for (DefaultMutableTreeNode node : m_gui.getCheckedList())
         {
             Object userObj = node.getUserObject();
 
             if (userObj instanceof ClassCost)
-                reg.addClass(((ClassCost) userObj).festivalClass.name);
+                classes.add(((ClassCost) userObj).festivalClass.name);
 
             if (userObj instanceof MilongaCost)
-                reg.addClass(((MilongaCost) userObj).milonga.name);
+                classes.add(((MilongaCost) userObj).milonga.name);
         }
 
-        return reg;
+        return new Registrant(m_sheetClient.getNumWorksheetRows() + 1,
+                              m_gui.getFirstName(),
+                              m_gui.getLastName(),
+                              m_gui.getEmail(),
+                              m_gui.getPhoneNumber(),
+                              m_gui.getStudentStatus(),
+                              m_gui.getDancerType(),
+                              m_gui.getExperienceLevel(),
+                              m_gui.getTotal(),
+                              m_gui.getNumRegistrants(),
+                              classes,
+                              m_gui.getSendETicket().equals(YesNo.YES),
+                              m_gui.getSecondRegFirstName(),
+                              m_gui.getSecondRegLastName());
     }
 
     /**
@@ -266,7 +268,7 @@ public class OnsiteRegisterer
      */
     public void changeTicketCost(StudentType st)
     {
-        gui.setTreeModel(getTreeModel(st));
+        m_gui.setTreeModel(getTreeModel(st));
     }
 
     /**
@@ -279,7 +281,7 @@ public class OnsiteRegisterer
     public DefaultTreeModel getTreeModel(StudentType st)
     {
         // set class cost
-        ClassCost.setClassCost(festival.getClassCost(st));
+        ClassCost.setClassCost(m_festival.getClassCost(st));
 
         // root
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
@@ -287,13 +289,13 @@ public class OnsiteRegisterer
         // special tickets
         DefaultMutableTreeNode specialTickets = new DefaultMutableTreeNode("Special Tickets");
         for (SpecialPassType passType : SpecialPassType.values())
-            specialTickets.add(new DefaultMutableTreeNode(new SpecialPassCost(festival.getSpecialPass(st, passType))));
+            specialTickets.add(new DefaultMutableTreeNode(new SpecialPassCost(m_festival.getSpecialPass(st, passType))));
         root.add(specialTickets);
 
         // milongas
         DefaultMutableTreeNode milongas = new DefaultMutableTreeNode("Milongas");
         for (FestivalDay day : FestivalDay.values())
-            milongas.add(new DefaultMutableTreeNode(new MilongaCost(festival.getMilonga(day), festival.getMilongaPrice(st, day).cost, day)));
+            milongas.add(new DefaultMutableTreeNode(new MilongaCost(m_festival.getMilonga(day), m_festival.getMilongaPrice(st, day).cost, day)));
         root.add(milongas);
 
         // a la carte
@@ -301,19 +303,19 @@ public class OnsiteRegisterer
 
         // friday classes
         DefaultMutableTreeNode fridayClasses = new DefaultMutableTreeNode("Friday Classes");
-        for (datastructures.festival.Class friClass : festival.getClasses(FestivalDay.FRIDAY))
+        for (datastructures.festival.Class friClass : m_festival.getClasses(FestivalDay.FRIDAY))
             fridayClasses.add(new DefaultMutableTreeNode(new ClassCost(friClass, FestivalDay.FRIDAY)));
         aLaCarte.add(fridayClasses);
 
         // saturday classes
         DefaultMutableTreeNode saturdayClasses = new DefaultMutableTreeNode("Saturday Classes");
-        for (datastructures.festival.Class satClass : festival.getClasses(FestivalDay.SATURDAY))
+        for (datastructures.festival.Class satClass : m_festival.getClasses(FestivalDay.SATURDAY))
             saturdayClasses.add(new DefaultMutableTreeNode(new ClassCost(satClass, FestivalDay.SATURDAY)));
         aLaCarte.add(saturdayClasses);
 
         // sunday classes
         DefaultMutableTreeNode sundayClasses = new DefaultMutableTreeNode("Sunday Classes");
-        for (datastructures.festival.Class sunClass : festival.getClasses(FestivalDay.SUNDAY))
+        for (datastructures.festival.Class sunClass : m_festival.getClasses(FestivalDay.SUNDAY))
             sundayClasses.add(new DefaultMutableTreeNode(new ClassCost(sunClass, FestivalDay.SUNDAY)));
         aLaCarte.add(sundayClasses);
 

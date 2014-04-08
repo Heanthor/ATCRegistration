@@ -398,17 +398,6 @@ public class RegistrationGUI
         panel_1.add(btnListClasses, "2, 18");
         panel_1.add(btnDelete, "2, 22");
 
-        JButton btnMarkAsPaid = new JButton("Mark as Paid");
-        btnMarkAsPaid.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                pv.markAsPaid(getSelectedRegistrants());
-            }
-        });
-        panel_1.add(btnMarkAsPaid, "2, 26");
-
         JButton btnSendEticket = new JButton("Send E-Ticket");
         btnSendEticket.addMouseListener(new MouseAdapter()
         {
@@ -419,16 +408,6 @@ public class RegistrationGUI
             }
         });
 
-        JButton btnMarkAsUnpaid = new JButton("Mark as Unpaid");
-        btnMarkAsUnpaid.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                pv.markAsUnpaid(getSelectedRegistrants());
-            }
-        });
-        panel_1.add(btnMarkAsUnpaid, "2, 30");
         panel_1.add(btnSendEticket, "2, 34");
 
         JButton btnGetSummary = new JButton("Get Summary");
@@ -440,18 +419,6 @@ public class RegistrationGUI
                 pv.showSummary();
             }
         });
-
-        JButton payAndSend = new JButton("Mark as Paid & Send E-Ticket");
-        payAndSend.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                pv.markAsPaidAndSendETicket(getSelectedRegistrants());
-            }
-        });
-        panel_1.add(payAndSend, "2, 38");
-        panel_1.add(btnGetSummary, "2, 42");
 
         JButton btnRefresh = new JButton("Refresh");
         btnRefresh.addMouseListener(new MouseAdapter()
@@ -657,7 +624,6 @@ public class RegistrationGUI
                        + spacing + "Experience Level: " + reg.expLvl + "\n"
                        + spacing + "Amount: " + reg.amount + "\n"
                        + spacing + "Num Registrants: " + reg.numRegistrants + "\n"
-                       + spacing + "Paid: " + reg.hasPaid() + "\n"
                        + spacing + "ETicket Sent: " + reg.hasEticketSent() + "\n"
                        + spacing + "Classes: \n";
     }

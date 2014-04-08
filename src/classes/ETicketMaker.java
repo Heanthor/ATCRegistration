@@ -5,12 +5,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import datastructures.Constants;
-import datastructures.Enums;
 import datastructures.Name;
 import datastructures.Enums.StudentType;
 
@@ -39,7 +38,7 @@ public class ETicketMaker
      * @param classes     list of classes the registrant will be taking
      * @return a string of the location of the generate e-ticket image
      */
-    public String createTicket(Name name, StudentType studentType, ArrayList<String> classes)
+    public String createTicket(Name name, StudentType studentType, List<String> classes)
     {
         String output = outputDir + "/" + name.last + "_" + name.first + "-eticket.png";
 

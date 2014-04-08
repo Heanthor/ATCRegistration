@@ -369,22 +369,6 @@ public class SheetClient
     }
 
     /**
-     * @param regs list of registrants to mark as paid in the google spreadsheet
-     */
-    public void markAsPaid(List<Registrant> regs)
-    {
-        changeContents(regs, getColumn(wEntries[mode.ordinal()], Constants.PAYMENT_RECEIVED_COL).getEntries(), Constants.PAYMENT_RECEIVED);
-    }
-
-    /**
-     * @param regs list of registrants to mark as unpaid in the google spreadsheet
-     */
-    public void markAsUnpaid(List<Registrant> regs)
-    {
-        changeContents(regs, getColumn(wEntries[mode.ordinal()], Constants.PAYMENT_RECEIVED_COL).getEntries(), "");
-    }
-
-    /**
      * @param regs list of registrants whose e-ticket is to be marked as sent in the google spreadsheet
      */
     public void markAsETicketSent(List<Registrant> regs)
@@ -452,15 +436,20 @@ public class SheetClient
         row.getCustomElements().setValueLocal(tagList.get(Constants.DANCER_TYPE_COL - 1), reg.dancerType.toString());
         row.getCustomElements().setValueLocal(tagList.get(Constants.EXP_LVL_COL - 1), reg.expLvl.toString());
         row.getCustomElements().setValueLocal(tagList.get(Constants.AMOUNT_COL - 1), String.format("$%02.2f", reg.amount));
+        row.getCustomElements().setValueLocal(tagList.get(Constants.NUMBER_REGISTRANTS_COL - 1), String.valueOf(reg.numRegistrants));
+
+        if (reg.hasSecondRegistrant())
+        {
+            row.getCustomElements().setValueLocal(tagList.get(Constants.SECOND_REGISTRANT_FIRST_NAME_COL - 1), String.valueOf(reg.secondRegName.first));
+            row.getCustomElements().setValueLocal(tagList.get(Constants.SECOND_REGISTRANT_LAST_NAME_COL - 1), String.valueOf(reg.secondRegName.last));
+        }
 
         // add classes
-        ArrayList<String> regClasses = reg.getFilteredClasses();
+        List<String> regClasses = reg.getFilteredClasses();
         for (int i = 0; i < regClasses.size(); ++i)
             row.getCustomElements().setValueLocal(tagList.get(Constants.CLASS_MIN_COL - 1 + i), regClasses.get(i));
 
-        // mark if paid/eticket sent
-        if (reg.hasPaid())
-            row.getCustomElements().setValueLocal(tagList.get(Constants.PAYMENT_RECEIVED_COL - 1), Constants.PAYMENT_RECEIVED);
+        // mark if eticket sent
         if (reg.hasEticketSent())
             row.getCustomElements().setValueLocal(tagList.get(Constants.ETICKET_COL - 1), Constants.ETICKET_SENT);
 

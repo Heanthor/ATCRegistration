@@ -106,31 +106,34 @@ public class FestivalClassesTree
 
     private class UpdateCostListener implements TreeCheckingListener
     {
-        private OnsiteRegistrationGUI orGui;
+        private OnsiteRegistrationGUI m_onsiteRegistrationGUI;
 
         public UpdateCostListener(OnsiteRegistrationGUI orGui)
         {
-            this.orGui = orGui;
+            m_onsiteRegistrationGUI = orGui;
         }
 
         public void valueChanged(TreeCheckingEvent e)
         {
-            ArrayList<DefaultMutableTreeNode> checkedLeaves = new ArrayList<DefaultMutableTreeNode>();
+            ArrayList<DefaultMutableTreeNode> checkedLeaves = new ArrayList<>();
 
-            for (TreePath tp : tree.getCheckingPaths())
+            for (TreePath tp : m_festivalTree.getCheckingPaths())
             {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
+
                 // only add leaves
                 if (node.isLeaf())
+                {
                     checkedLeaves.add(node);
+                }
             }
 
-            orGui.updateTotalCost(checkedLeaves);
+            m_onsiteRegistrationGUI.updateTotalCost(checkedLeaves);
         }
     }
 
-    private FestivalTree tree;
-    private JScrollPane  sPane;
+    private FestivalTree m_festivalTree;
+    private JScrollPane  m_scrollPane;
 
     /**
      * @param dtm TreeModel to use in creating the tree
@@ -138,18 +141,18 @@ public class FestivalClassesTree
     public FestivalClassesTree(TreeModel dtm)
     {
         // set up tree
-        tree = new FestivalTree();
-        tree.setModel(dtm);
-        tree.getCheckingModel().setCheckingMode(CheckingMode.SIMPLE);
-        tree.setCellRenderer(new CheckBoxTreeCellRenderer());
+        m_festivalTree = new FestivalTree();
+        m_festivalTree.setModel(dtm);
+        m_festivalTree.getCheckingModel().setCheckingMode(CheckingMode.SIMPLE);
+        m_festivalTree.setCellRenderer(new CheckBoxTreeCellRenderer());
 
-        tree.expandAll();
-        tree.setRootVisible(false);
-        tree.setToggleClickCount(0);
+        m_festivalTree.expandAll();
+        m_festivalTree.setRootVisible(false);
+        m_festivalTree.setToggleClickCount(0);
 
         // create JScrollPanel and add tree
-        sPane = new JScrollPane();
-        sPane.setViewportView(tree);
+        m_scrollPane = new JScrollPane();
+        m_scrollPane.setViewportView(m_festivalTree);
     }
 
     /**
@@ -160,7 +163,7 @@ public class FestivalClassesTree
      */
     public void addCheckingListener(OnsiteRegistrationGUI orGui)
     {
-        tree.addTreeCheckingListener(new UpdateCostListener(orGui));
+        m_festivalTree.addTreeCheckingListener(new UpdateCostListener(orGui));
     }
 
     /**
@@ -171,7 +174,7 @@ public class FestivalClassesTree
      */
     public JScrollPane getScrollingPaneTree()
     {
-        return sPane;
+        return m_scrollPane;
     }
 
     /**
@@ -183,7 +186,7 @@ public class FestivalClassesTree
     {
         ArrayList<DefaultMutableTreeNode> checkedLeaves = new ArrayList<DefaultMutableTreeNode>();
 
-        for (TreePath tp : tree.getCheckingPaths())
+        for (TreePath tp : m_festivalTree.getCheckingPaths())
         {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
             // only add leaves
@@ -201,9 +204,9 @@ public class FestivalClassesTree
      */
     public void setTreeModel(TreeModel tm)
     {
-        tree.setModel(tm);
+        m_festivalTree.setModel(tm);
         // models start in a collapsed state, thus we need to re-expand
-        tree.expandAll();
+        m_festivalTree.expandAll();
     }
 
     /**
@@ -211,6 +214,6 @@ public class FestivalClassesTree
      */
     public void clearChecking()
     {
-        tree.clearChecking();
+        m_festivalTree.clearChecking();
     }
 }
