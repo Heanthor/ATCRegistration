@@ -73,9 +73,10 @@ project directory) and description of the relevant files:
 		information including the google username and password as well as the
 		google spreadsheet information that formsite dumps its registration
 		information to.}
-	\bolditem{files/info/festivalClasses.xml}{meta-data including times/artists
-		of classes, milongas, and pricing information used for the onsite
-		registraiton system.}
+	\bolditem{files/info/festivalClasses.xml}{meta-data including times/artists of classes, milongas, and pricing
+	    information used for the onsite registraiton system. The \code{partner} attribute is used to specify partner
+	    pricing. If the attribute is not given, the price is assumed to be double of the single registrant pricing. This
+	    feature is restricted to only special passes e.g. Friday/Saturday/Sunday/Full/Milonga.}
 	\bolditem{files/media/ticketEmail.html}{body of the eticket email written in html}
 	\bolditem{files/media/prefestivalEmail.html}{body of the prefestival email written in html}
 	\bolditem{files/media/thankyou.html}{body of the thank you email written in html}
@@ -122,16 +123,8 @@ spreadsheets.
 
 \sn{Producing a Java Executable}
 
-To produce a java executable using eclipse, go to:
-\code{File$\rightarrow$Export}. Choose \emph{Runnable JAR file} from the
-\emph{Java} folder. The \emph{Launch Configuration} is the name of the class
-that contains the driver. This will be \code{PaymentValidator},
-\code{OnsiteRegisterer}, or \code{MassEmailer}. You should chose the option
-\emph{Package required libraries into generated JAR} so that the program is
-completely self-inclusive. Click \emph{Finish} and you're done!
-
-There might be some warnings, but don't worry about them. You can then run the
-jar using Java. 
+Run \code{ant} without any arguments in the root directory i.e. where the \code{build.xml} file is. This will producer
+three jar files in \code{bin/jar/}.
 
 \ssn{Running in Windows}
 
@@ -152,8 +145,8 @@ Accessories\ra Command Prompt}. In the command prompt do the following:
 \ssn{Running using Linux}
 
 Running on Linux is SOOOOO easy. You could open it like Windows: use your file
-browser (dolphin in KDE and nautilus in GNOME). Right click the jar file, "Open
-with", and then type \code{java -jar} in the text box. 
+browser (dolphin in KDE and nautilus in GNOME). Right click the jar file, ``Open
+with'', and then type \code{java -jar} in the text box. 
 
 Another way is to run it in a terminal which I recommend because you'll be able
 to view any errors that get created during the running of the program. Change
