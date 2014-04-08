@@ -617,15 +617,31 @@ public class RegistrationGUI
 
     private String formatRegistrantInfo(Registrant reg)
     {
-        return spacing + "Email: " + reg.email + "\n"
-                       + spacing + "Phone: " + reg.phone + "\n"
-                       + spacing + "Student Type: " + reg.studentType + "\n"
-                       + spacing + "Dancer Type: " + reg.dancerType + "\n"
-                       + spacing + "Experience Level: " + reg.expLvl + "\n"
-                       + spacing + "Amount: " + reg.amount + "\n"
-                       + spacing + "Num Registrants: " + reg.numRegistrants + "\n"
-                       + spacing + "ETicket Sent: " + reg.hasEticketSent() + "\n"
-                       + spacing + "Classes: \n";
+        StringBuilder builder = new StringBuilder();
+        addLineToBuilder(builder, 1, "Email: ", reg.email);
+        addLineToBuilder(builder, 1, "Phone: ", reg.phone);
+        addLineToBuilder(builder, 1, "Student Type: ", reg.studentType.toString());
+        addLineToBuilder(builder, 1, "Dancer Type: ", reg.dancerType.toString());
+        addLineToBuilder(builder, 1, "Experience Level: ", reg.expLvl.toString());
+        addLineToBuilder(builder, 1, "Amount: ", String.valueOf(reg.amount));
+        addLineToBuilder(builder, 1, "Num Registrants: ", String.valueOf(reg.numRegistrants));
+
+        if (reg.hasSecondRegistrant())
+        {
+            addLineToBuilder(builder, 2, "First Name: ", reg.secondRegName.first);
+            addLineToBuilder(builder, 2, "Last Name: ", reg.secondRegName.last);
+        }
+
+        addLineToBuilder(builder, 1, "ETicket Sent: ", String.valueOf(reg.hasEticketSent()));
+        builder.append(spacing).append("Classes: \n");
+        return builder.toString();
+    }
+
+    private void addLineToBuilder(StringBuilder builder, int numSpaces, String... args)
+    {
+        for (int i = 0; i < numSpaces; ++i) { builder.append(spacing); }
+        for (String arg : args)             { builder.append(arg); }
+        builder.append("\n");
     }
 
     /**

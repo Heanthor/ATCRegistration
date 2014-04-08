@@ -180,10 +180,13 @@ public class RegistrationWorksheet
                     break;
                 case Constants.NUMBER_REGISTRANTS_COL:
                     numRegistrantsCol.add(entry);
+                    break;
                 case Constants.SECOND_REGISTRANT_FIRST_NAME_COL:
                     secondRegFirstNameCol.add(entry);
+                    break;
                 case Constants.SECOND_REGISTRANT_LAST_NAME_COL:
                     secondRegLastNameCol.add(entry);
+                    break;
                 default:
                     // check if in class range
                     if (Constants.CLASS_MIN_COL <= currentCol && currentCol <= Constants.CLASS_MAX_COL)

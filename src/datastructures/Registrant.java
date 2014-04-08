@@ -67,7 +67,7 @@ public class Registrant implements Comparable<Registrant>
 
     public boolean hasSecondRegistrant()
     {
-        return this.secondRegName.first != null && this.secondRegName.last != null;
+        return this.numRegistrants == 2;
     }
 
     /**
