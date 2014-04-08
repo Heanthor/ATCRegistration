@@ -33,8 +33,8 @@ the confirmed registrants.
 		this system provides us with the attendee's class schedule and provides a
 		mechanism to send an e-ticket to their email address.}
 	\citem{MassEmailer}{The mass emailing system is used to send an email to
-		every paid registrant in the \tb{Eary Registration} spreadsheet. Both the
-		\emph{formsite} and \emph{onsite} worksheets are used to generate the list
+		every registrant who received an e-ticket. Both the early and late registratants (includes the formsite and
+		on-site registrants) are used to generate the list
 		of email addresses that the message is sent to.}
 \eenum
 
@@ -117,7 +117,7 @@ The \code{PaymentValidator} and \code{OnsiteRegisterer} do not take any
 arguments. However, the \code{MassEmailer} requires a single argument
 representing which email type to send i.e. to send the \emph{prefestival
 information} email or the \emph{thank you} email. The email is sent to all of
-the \tb{paid} registrants in both the early and late spreadsheets and the
+the registrants who have received an e-ticket in both the early and late spreadsheets and the
 respective \emph{formsite} and \emph{onsite} worksheets within those
 spreadsheets.
 
@@ -126,41 +126,15 @@ spreadsheets.
 Run \code{ant} without any arguments in the root directory i.e. where the \code{build.xml} file is. This will producer
 three jar files in \code{bin/jar/}.
 
-\ssn{Running in Windows}
+\ssn{Running in Windows, Linux, Mac}
 
-In Windows, the \code{PaymentValidator} and
-\code{OnsiteRegisterer} can be run by just double clicking on the jar file.
-The \code{MassEmailer} is a bit more difficult to run in Windows because it
-takes an argument, so you need to run this using DOS/Command Prompt. I don't
-know where it is in Windows, but I think it's something like \emph{Programs\ra
-Accessories\ra Command Prompt}. In the command prompt do the following:
-\benum
-	\item Change directory to where the \code{MassEmailer} jar program exists.
-		I'll call it \code{massEmailer.jar}.
-	\item Run the jar with java using its absolute path. It's probably something like:
-		\code{"C:\textbackslash{}Program Files (x86)\textbackslash{}Java\textbackslash{}jre7\textbackslash{}bin\textbackslash{}java" -jar massiveEmailer.jar argument}
-	\item \code{argument} is either 1 or 2, depending on which email type you want to send
-\eenum
-
-\ssn{Running using Linux}
-
-Running on Linux is SOOOOO easy. You could open it like Windows: use your file
-browser (dolphin in KDE and nautilus in GNOME). Right click the jar file, ``Open
-with'', and then type \code{java -jar} in the text box. 
-
-Another way is to run it in a terminal which I recommend because you'll be able
-to view any errors that get created during the running of the program. Change
-to the directory containing the jar file and run:
+If you are not a command line junky, then you can simply double click on the jar file and it \emph{should} work. You can
+run it through the command line as well, which might give you more debugging information:
 \bitem
 	\citem{java -jar paymentValidator.jar}{}
 	\citem{java -jar onsiteRegistration.jar}{}
-	\citem{java -jar massEmailer.jar [argument]}{where \code{argument} is either 1 or 2}
+	\citem{java -jar massEmailer.jar}{}
 \eitem
-
-\ssn{Running using MacOS}
-
-I have no idea. It's probably similar to Linux since they're both UNIX-like
-operating systems. Google will be your friend.
 
 \sn{Troubleshooting, Problems}
 
