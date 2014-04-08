@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import classes.AtcErr;
 import classes.Configuration;
 import classes.ETicketMaker;
 import classes.Emailer;

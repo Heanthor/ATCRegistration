@@ -568,8 +568,7 @@ public class RegistrationGUI
         }
         catch (BadLocationException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Error trying to clear out the list of classes.");
         }
     }
 
@@ -664,8 +663,7 @@ public class RegistrationGUI
         }
         catch (BadLocationException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Error trying to update the registration summary");
         }
     }
 

@@ -63,8 +63,8 @@ public class Emailer
         }
         catch (MessagingException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not connect to account with username '%s' and password '%s'",
+                                     userName, passwd);
         }
     }
 
@@ -122,11 +122,11 @@ public class Emailer
     {
         // perform some checks to make sure a sane email can be sent
         if (recipients.size() == 0)
-            throw new AtcErr("No one to email to");
+            AtcErr.createErrorDialog("No one to email to");
         if (subject == null)
-            throw new AtcErr("No subject for email");
+            AtcErr.createErrorDialog("No subject for email");
         if (bodyFile == null)
-            throw new AtcErr("No body file for email");
+            AtcErr.createErrorDialog("No body file for email");
 
         try
         {
@@ -200,8 +200,7 @@ public class Emailer
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not read email body file '%s'", bodyFile);
         }
 
         return body;

@@ -39,8 +39,7 @@ public class XmlParserHelper
         }
         catch (SAXException | IOException | ParserConfigurationException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not open file '%s'", filename);
         }
 
         return dom.getDocumentElement();
@@ -58,8 +57,7 @@ public class XmlParserHelper
     {
         NodeList nlist = ele.getElementsByTagName(tag);
         if (nlist.getLength() != 1)
-            throw new AtcErr("Number of elements with tag (" + tag + ") should be (1), found ("
-                                     + nlist.getLength() + ")");
+            AtcErr.createErrorDialog("Number of elements with tag '%s' should be (1), found %d.", tag, nlist.getLength());
         return (Element) nlist.item(0);
     }
 
@@ -74,7 +72,8 @@ public class XmlParserHelper
     {
         NodeList nl = e.getElementsByTagName(tag);
         if (nl.getLength() != 1)
-            throw new AtcErr("Expecting only a single tag with tag name: " + tag + ": " + nl.getLength());
+            AtcErr.createErrorDialog("Expecting only a single tag with tag name: '%s'. Node list length is %d",
+                                     tag, nl.getLength());
 
         return nl.item(0).getTextContent();
     }

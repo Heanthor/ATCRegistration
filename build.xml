@@ -16,7 +16,7 @@
 
 
     <!-- targets -->
-    <target name="fatties" depends="jar-fat-onsite,jar-fat-payment,jar-fat-emailer"/>
+    <target name="fatties" depends="clean,jar-fat-onsite,jar-fat-payment,jar-fat-emailer"/>
 
     <target name="clean">
         <delete dir="bin"/>

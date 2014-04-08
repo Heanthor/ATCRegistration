@@ -202,7 +202,10 @@ public class Enums
         else if (sType.toLowerCase().contains("general"))
             return StudentType.GENERAL_ADMISSION;
         else
-            throw new AtcErr("Converting string to StudentType: could not parse: " + sType);
+        {
+            AtcErr.createErrorDialog("Converting string to StudentType: could not parse: '%s'", sType);
+            return null;
+        }
     }
 
     /**
@@ -223,7 +226,10 @@ public class Enums
         else if (dType.toLowerCase().contains(DancerType.LEADER.toString().toLowerCase()))
             return DancerType.LEADER;
         else
-            throw new AtcErr("Converting string to DancerType: could not parse: " + dType);
+        {
+            AtcErr.createErrorDialog("Converting string to DancerType: could not parse: '%s'", dType);
+            return null;
+        }
     }
 
     /**
@@ -246,6 +252,9 @@ public class Enums
         else if (eLvl.toLowerCase().contains(ExperienceLevel.ADVANCED.toString().toLowerCase()))
             return ExperienceLevel.ADVANCED;
         else
-            throw new AtcErr("Converting string to ExperienceLevel: could not parse: " + eLvl);
+        {
+            AtcErr.createErrorDialog("Converting string to ExperienceLevel: could not parse: '%s'", eLvl);
+            return null;
+        }
     }
 }

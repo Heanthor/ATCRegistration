@@ -52,6 +52,7 @@ public class SheetClient
     private SheetClientMode       mode;
     private RegistrationWorksheet regWorksheet; // object to parse and retrieve information from cell feeds
     private RegistrationMode      regisMode; // early or late registration
+    private String                spreadsheetName;
 
     /**
      * While the sheet mode is set, the SheetClient must be refreshed
@@ -73,17 +74,19 @@ public class SheetClient
         // get spreadsheet
         SpreadsheetEntry spreadsheet = getSpreadsheet();
         if (spreadsheet == null)
-            throw new AtcErr("Could not locate spreadsheet: " + ai.spreadsheets[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate spreadsheet: '%s'", ai.spreadsheets[regisMode.ordinal()]);
+
+        spreadsheetName = spreadsheet.getTitle().toString();
 
         // get formsite worksheet
         WorksheetEntry formsiteWorksheet = getWorksheetEntry(spreadsheet, ai.formsiteWkShtTitles[regisMode.ordinal()]);
         if (formsiteWorksheet == null)
-            throw new AtcErr("Could not locate worksheet: " + ai.formsiteWkShtTitles[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate worksheet: '%s'", ai.formsiteWkShtTitles[regisMode.ordinal()]);
 
         // get onsite worksheet
         WorksheetEntry onsiteWorksheet = getWorksheetEntry(spreadsheet, ai.onsiteWkShtTitles[regisMode.ordinal()]);
         if (onsiteWorksheet == null)
-            throw new AtcErr("Could not locate worksheet: " + ai.onsiteWkShtTitles[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate worksheet: '%s'", ai.onsiteWkShtTitles[regisMode.ordinal()]);
 
         wEntries = new WorksheetEntry[2];
         wEntries[SheetClientMode.FORM_SITE.ordinal()] = formsiteWorksheet;
@@ -125,17 +128,19 @@ public class SheetClient
         // get spreadsheet
         SpreadsheetEntry spreadsheet = getSpreadsheet();
         if (spreadsheet == null)
-            throw new AtcErr("Could not locate spreadsheet: " + ai.spreadsheets[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate spreadsheet: '%s'", ai.spreadsheets[regisMode.ordinal()]);
+
+        spreadsheetName = spreadsheet.getTitle().toString();
 
         // get formsite worksheet
         WorksheetEntry formsiteWorksheet = getWorksheetEntry(spreadsheet, ai.formsiteWkShtTitles[regisMode.ordinal()]);
         if (formsiteWorksheet == null)
-            throw new AtcErr("Could not locate worksheet: " + ai.formsiteWkShtTitles[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate worksheet: '%s'", ai.formsiteWkShtTitles[regisMode.ordinal()]);
 
         // get onsite worksheet
         WorksheetEntry onsiteWorksheet = getWorksheetEntry(spreadsheet, ai.onsiteWkShtTitles[regisMode.ordinal()]);
         if (onsiteWorksheet == null)
-            throw new AtcErr("Could not locate worksheet: " + ai.onsiteWkShtTitles[regisMode.ordinal()]);
+            AtcErr.createErrorDialog("Could not locate worksheet: '%s'", ai.onsiteWkShtTitles[regisMode.ordinal()]);
 
         wEntries[SheetClientMode.FORM_SITE.ordinal()] = formsiteWorksheet;
         wEntries[SheetClientMode.ON_SITE.ordinal()] = onsiteWorksheet;
@@ -170,8 +175,7 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not get spreadsheet '%s'", ai.spreadsheets[regisMode.ordinal()]);
         }
 
         return null;
@@ -187,8 +191,8 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not get worksheet with name '%s' in spreadsheet '%s'",
+                                     worksheetTitle, spreadsheet.getTitle());
         }
 
         for (WorksheetEntry we : worksheets)
@@ -218,8 +222,8 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not query for the worksheet rows in worksheet '%s' of spreadsheet '%s'",
+                                     we.getTitle(), spreadsheetName);
         }
 
         return feed;
@@ -272,12 +276,11 @@ public class SheetClient
         try
         {
             feed = service.query(cq, CellFeed.class);
-
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Error querying for the '%d' column in spreadsheet '%s' worksheet '%s'",
+                                     column, spreadsheetName, we.getTitle());
         }
 
         return feed;
@@ -350,8 +353,7 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Error getting the google document spreadsheet to delete registrants.");
         }
 
         for (Registrant reg : revRegList)
@@ -363,8 +365,7 @@ public class SheetClient
             }
             catch (IOException | ServiceException e)
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                AtcErr.createErrorDialog("Error trying to delete registrant '%s'", reg.name);
             }
     }
 
@@ -390,8 +391,7 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Error updating the google document spreadsheet");
         }
     }
 
@@ -414,8 +414,9 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not get the worksheet information to push a new registrant for " +
+                                     "worksheet '%s' in spreadsheet '%s'",
+                                     wEntries[mode.ordinal()].getTitle(), spreadsheetName);
         }
 
         // from the listfeed, we can retrieve the header row tags
@@ -460,8 +461,8 @@ public class SheetClient
         }
         catch (IOException | ServiceException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AtcErr.createErrorDialog("Could not insert the new registrant in worksheet '%s' of spreadsheet '%s'",
+                                     wEntries[mode.ordinal()].getTitle(), spreadsheetName);
         }
     }
 
