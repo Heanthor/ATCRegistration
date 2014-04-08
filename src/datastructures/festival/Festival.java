@@ -35,11 +35,13 @@ public class Festival
             throw new AtcErr("Festival XML File: NULL");
 
         FestivalXMLParser fxmlp = new FestivalXMLParser(festivalFile);
-        events = fxmlp.getEvents(Constants.DAYS_IN_FESTIVAL);
+        events = fxmlp.getEvents(FestivalDay.values().length);
 
-        prices = new Prices[Constants.NUM_STUDENT_TYPES];
-        for (StudentType st : Enums.StudentType.values())
+        prices = new Prices[StudentType.values().length];
+        for (StudentType st : StudentType.values())
+        {
             prices[st.ordinal()] = fxmlp.getPrices(st);
+        }
     }
 
     /**

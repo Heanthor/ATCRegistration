@@ -97,6 +97,8 @@ public class OnsiteRegisterer
         boolean addSundayClasses = true;
         boolean addMilongas = true;
 
+        int numRegistrants = m_gui.getNumRegistrants();
+
         for (DefaultMutableTreeNode node : checkedLeaves)
         {
             Object userObj = node.getUserObject();
@@ -139,22 +141,31 @@ public class OnsiteRegisterer
                 {
                 case FRIDAY:
                     if (addFridayClasses)
-                        totalCost += ClassCost.cost;
+                        totalCost += ClassCost.cost * numRegistrants;
                     break;
                 case SATURDAY:
                     if (addSaturdayClasses)
-                        totalCost += ClassCost.cost;
+                        totalCost += ClassCost.cost * numRegistrants;
                     break;
                 case SUNDAY:
                     if (addSundayClasses)
-                        totalCost += ClassCost.cost;
+                        totalCost += ClassCost.cost * numRegistrants;
                     break;
                 }
             }
 
             // always add special passes
             if (userObj instanceof SpecialPassCost)
-                totalCost += ((SpecialPassCost) userObj).specialPass.cost;
+            {
+                if (numRegistrants == 2)
+                {
+                    totalCost += ((SpecialPassCost) userObj).specialPass.partnerCost;
+                }
+                else
+                {
+                    totalCost += ((SpecialPassCost) userObj).specialPass.cost;
+                }
+            }
 
             // milonga passes more complicated: need to check day and if milonga pass
             if (userObj instanceof MilongaCost)
@@ -167,22 +178,21 @@ public class OnsiteRegisterer
                     {
                     case FRIDAY:
                         if (addFridayClasses)
-                            totalCost += mc.cost;
+                            totalCost += mc.cost * numRegistrants;
                         break;
                     case SATURDAY:
                         if (addSaturdayClasses)
-                            totalCost += mc.cost;
+                            totalCost += mc.cost * numRegistrants;
                         break;
                     case SUNDAY:
                         if (addSundayClasses)
-                            totalCost += mc.cost;
+                            totalCost += mc.cost * numRegistrants;
                         break;
                     }
                 }
             }
         }
 
-        totalCost *= m_gui.getNumRegistrants();
         m_gui.updateTotalCost(totalCost, m_config.getTaxPercent() / 100. * totalCost);
     }
 
@@ -359,9 +369,13 @@ public class OnsiteRegisterer
             this.specialPass = specialPass;
         }
 
+        @Override
         public String toString()
         {
-            return "($" + specialPass.cost + ") " + specialPass;
+            StringBuilder builder = new StringBuilder();
+            builder.append("($").append(specialPass.cost).append("/$").append(specialPass.partnerCost).append(") ");
+            builder.append(specialPass);
+            return builder.toString();
         }
     }
 

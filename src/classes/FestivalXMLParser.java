@@ -1,6 +1,8 @@
 package classes;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -167,13 +169,19 @@ public class FestivalXMLParser
      * @param studentTypeEle XML Element node that contains the special pass XML tags
      * @return List of SpecialPass objects
      */
-    private ArrayList<SpecialPass> parseSpecialPasses(Element studentTypeEle)
+    private List<SpecialPass> parseSpecialPasses(Element studentTypeEle)
     {
-        ArrayList<SpecialPass> sps = new ArrayList<SpecialPass>();
+        List<SpecialPass> sps = new LinkedList<>();
 
         Element spsEle = XmlParserHelper.getSingleElement(studentTypeEle, "SpecialPasses");
         for (SpecialPassType spt : Enums.SpecialPassType.values())
-            sps.add(new SpecialPass(spt, XmlParserHelper.getContentInteger(spsEle, spt.getXmlTag())));
+        {
+            Element specialPassEle = XmlParserHelper.getSingleElement(spsEle, spt.getXmlTag());
+            int singleCost = Integer.parseInt(specialPassEle.getFirstChild().getNodeValue());
+            String partnerCostAttribute = specialPassEle.getAttribute("partner");
+            int partnerCost = "".equals(partnerCostAttribute) ? singleCost * 2 : Integer.parseInt(partnerCostAttribute);
+            sps.add(new SpecialPass(spt, singleCost, partnerCost));
+        }
 
         return sps;
     }

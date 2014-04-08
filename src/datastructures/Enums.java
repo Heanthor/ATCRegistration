@@ -19,7 +19,7 @@ public class Enums
                     @Override
                     public String getXmlTag()
                     {
-                        return "UmdGmuStudent";
+                        return "UmdStudent";
                     }
 
                     @Override

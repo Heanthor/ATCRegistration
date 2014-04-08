@@ -164,7 +164,7 @@
 		</Event>
 	</Events>
 	<Prices>
-		<UmdGmuStudent>
+		<UmdStudent>
 			<SpecialPasses>
 				<FullPass>70</FullPass>
 				<FridayPass>30</FridayPass>
@@ -178,7 +178,7 @@
 				<Saturday>0</Saturday>
 				<Sunday>0</Sunday>
 			</Milongas>
-		</UmdGmuStudent>
+		</UmdStudent>
 		<OtherStudent>
 			<SpecialPasses>
 				<FullPass>100</FullPass>
@@ -196,11 +196,11 @@
 		</OtherStudent>
 		<GeneralAdmission>
 			<SpecialPasses>
-				<FullPass>170</FullPass>
-				<FridayPass>60</FridayPass>
-				<SaturdayPass>80</SaturdayPass>
-				<SundayPass>70</SundayPass>
-				<MilongaPass>50</MilongaPass>
+				<FullPass partner="275">170</FullPass>
+				<FridayPass partner="92">60</FridayPass>
+				<SaturdayPass partner="138">80</SaturdayPass>
+				<SundayPass partner="115">70</SundayPass>
+				<MilongaPass partner="69">50</MilongaPass>
 			</SpecialPasses>
 			<SingleClass>35</SingleClass>
 			<Milongas>

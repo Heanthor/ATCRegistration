@@ -29,13 +29,16 @@ public class Prices
     {
         public final SpecialPassType passType;
         public final int             cost;
+        public final int             partnerCost;
 
-        public SpecialPass(SpecialPassType passType, int cost)
+        public SpecialPass(SpecialPassType passType, int cost, int partnerCost)
         {
             this.passType = passType;
             this.cost = cost;
+            this.partnerCost = partnerCost;
         }
 
+        @Override
         public int compareTo(SpecialPass sp)
         {
             return this.passType.ordinal() - sp.passType.ordinal();
@@ -46,6 +49,7 @@ public class Prices
             return this.passType.ordinal() == sp.passType.ordinal();
         }
 
+        @Override
         public String toString()
         {
             return passType + ": " + cost;
@@ -202,6 +206,7 @@ public class Prices
         throw new AtcErr("Could not find milonga price for day: " + day);
     }
 
+    @Override
     public String toString()
     {
         return studentType + "\n\tSingle class cost: " + singleClassCost + "\n\t"

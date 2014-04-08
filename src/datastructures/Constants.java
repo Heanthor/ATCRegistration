@@ -8,9 +8,6 @@ package datastructures;
  */
 public class Constants
 {
-    public static final int DAYS_IN_FESTIVAL  = 3;
-    public static final int NUM_STUDENT_TYPES = 3;
-
     /* SPREADSHEET COLUMN NUMBERS */
     public static final int    AMOUNT_COL                        = 3;
     public static final int    FIRST_NAME_COL                    = 6;

@@ -18,7 +18,7 @@
 # Compilation directories and files
 #
 bin
-outs
+out
 emailer.jar
 onsite.jar
 payment.jar
