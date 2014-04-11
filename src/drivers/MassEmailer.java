@@ -77,16 +77,15 @@ public class MassEmailer
 
         // set to early registrants
         MassEmailer me = new MassEmailer(config, RegistrationMode.EARLY_REGISTRATION);
-        me.setUpMassEmail(emailBodyFile, subjectLine);
-        if (!me.sendEmails(RegistrationMode.EARLY_REGISTRATION))
-        {
-            AtcErr.createErrorDialog("Did not send the early registrants their emails");
-        }
+        me.setUpEmail(emailBodyFile, subjectLine);
 
-        // set to late registrants
-        me.setRegistrationMode(RegistrationMode.LATE_REGISTRATION);
-        me.setUpMassEmail(emailBodyFile, subjectLine);
-        me.sendEmails(RegistrationMode.LATE_REGISTRATION);
+        me.addRegistrantsForMode(RegistrationMode.EARLY_REGISTRATION);
+        me.addRegistrantsForMode(RegistrationMode.LATE_REGISTRATION);
+
+        if (!me.sendEmails())
+        {
+            new AtcErr("Did not send the early registrants their emails");
+        }
     }
 
     private AccountInformation ai;
@@ -103,7 +102,6 @@ public class MassEmailer
     {
         ai = config.getAccountInformation();
         sc = new SheetClient(ai, SheetClientMode.FORM_SITE, regMode);
-        sc.refresh();
         emailer = new Emailer(ai.userName, ai.passwd);
     }
 
@@ -114,17 +112,24 @@ public class MassEmailer
      * @param bodyFile
      * @param subjLine
      */
-    public void setUpMassEmail(String bodyFile, String subjLine)
+    public void setUpEmail(String bodyFile, String subjLine)
     {
-        List<Registrant> paidRegsFormSite = sc.getPaidRegistrants();
-        sc.setMode(SheetClientMode.ON_SITE);
-        List<Registrant> paidRegsOnsite = sc.getPaidRegistrants();
-
         emailer.resetEmail();
         emailer.setSeperateEmails(true);
         emailer.sendAttachments(false);
         emailer.setSubjectLine(subjLine);
         emailer.setBodyFile(bodyFile);
+    }
+
+    void addRegistrantsForMode(RegistrationMode mode)
+    {
+        // reset the sheet client for the given mode
+        sc.setRegistrationMode(mode);
+
+        sc.setMode(SheetClientMode.FORM_SITE);
+        List<Registrant> paidRegsFormSite = sc.getPaidRegistrants();
+        sc.setMode(SheetClientMode.ON_SITE);
+        List<Registrant> paidRegsOnsite = sc.getPaidRegistrants();
 
         // add recipients
         for (Registrant reg : paidRegsFormSite)
@@ -138,23 +143,22 @@ public class MassEmailer
      * what they want to do.
      *
      * @return true if emails were sent, false otherwise
-     * @param registrationMode
      */
-    public boolean sendEmails(RegistrationMode registrationMode)
+    public boolean sendEmails()
     {
-        String msg = String.format("The email information that will be sent is for mode '%s': %s\n",
-                                   registrationMode, emailer);
+        String msg = String.format("The email information that will be sent is: %s\n", emailer);
         JTextArea textArea = new JTextArea(msg);
-        JScrollPane scrollPane = new JScrollPane(textArea);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        scrollPane.setPreferredSize(new Dimension(1000, 800));
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(800, 600));
 
         int res = JOptionPane.showOptionDialog(null, scrollPane, "Email Contents", JOptionPane.OK_CANCEL_OPTION,
                                                JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (res == JOptionPane.CANCEL_OPTION)
+        if (res == JOptionPane.CANCEL_OPTION || res == JOptionPane.CLOSED_OPTION)
         {
-            AtcErr.createErrorDialog("Not sending emails.");
+            new AtcErr("Not sending emails.");
         }
 
         queryUserIfSure("ARE YOU SURE YOU WANT TO SEND THESE EMAILS?");
@@ -173,12 +177,7 @@ public class MassEmailer
                                                JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (res == JOptionPane.CANCEL_OPTION)
         {
-            AtcErr.createErrorDialog("Not sending emails.");
+            new AtcErr("Not sending emails.");
         }
-    }
-
-    public void setRegistrationMode(RegistrationMode regMode)
-    {
-        sc.setRegistrationMode(regMode);
     }
 }

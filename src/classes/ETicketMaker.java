@@ -76,7 +76,7 @@ public class ETicketMaker
         }
         catch (IOException e)
         {
-            AtcErr.createErrorDialog("Could not create ticket '%s' using base eticket image '%s'", output, eticketFile);
+            new AtcErr("Could not create ticket '%s' using base eticket image '%s'", output, eticketFile);
         }
 
         return output;

@@ -203,7 +203,7 @@ public class Enums
             return StudentType.GENERAL_ADMISSION;
         else
         {
-            AtcErr.createErrorDialog("Converting string to StudentType: could not parse: '%s'", sType);
+            new AtcErr("Converting string to StudentType: could not parse: '%s'", sType);
             return null;
         }
     }
@@ -227,7 +227,7 @@ public class Enums
             return DancerType.LEADER;
         else
         {
-            AtcErr.createErrorDialog("Converting string to DancerType: could not parse: '%s'", dType);
+            new AtcErr("Converting string to DancerType: could not parse: '%s'", dType);
             return null;
         }
     }
@@ -253,7 +253,7 @@ public class Enums
             return ExperienceLevel.ADVANCED;
         else
         {
-            AtcErr.createErrorDialog("Converting string to ExperienceLevel: could not parse: '%s'", eLvl);
+            new AtcErr("Converting string to ExperienceLevel: could not parse: '%s'", eLvl);
             return null;
         }
     }

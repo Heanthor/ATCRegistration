@@ -64,8 +64,8 @@ public class Emailer
         }
         catch (MessagingException e)
         {
-            AtcErr.createErrorDialog("Could not connect to account with username '%s' and password '%s'",
-                                     userName, passwd);
+            new AtcErr("Could not connect to account with username '%s' and password '%s'",
+                       userName, passwd);
         }
     }
 
@@ -123,11 +123,11 @@ public class Emailer
     {
         // perform some checks to make sure a sane email can be sent
         if (recipients.size() == 0)
-            AtcErr.createErrorDialog("No one to email to");
+            new AtcErr("No one to email to");
         if (subject == null)
-            AtcErr.createErrorDialog("No subject for email");
+            new AtcErr("No subject for email");
         if (bodyFile == null)
-            AtcErr.createErrorDialog("No body file for email");
+            new AtcErr("No body file for email");
 
         try
         {
@@ -201,7 +201,7 @@ public class Emailer
         }
         catch (IOException e)
         {
-            AtcErr.createErrorDialog("Could not read email body file '%s'", bodyFile);
+            new AtcErr("Could not read email body file '%s'", bodyFile);
         }
 
         return body;
@@ -230,12 +230,11 @@ public class Emailer
 
     public String toString()
     {
-        return "Email message:" +
-                       "\n\tFrom: " + userName +
-                       "\n\tTo: " + (separateEmails ? "" : "(" + recipients.size() + ") " + recipients) +
-                       "\n\tBcc: " + (separateEmails ? "(" + recipients.size() + ") " + recipients : "") +
-                       "\n\tSubject: " + subject +
-                       "\n\tBody: " + getBody() +
-                       "\n\tAttachments: " + (sendAttachments ? attachments.toString() : "");
+        return "\n\tFrom: " + userName +
+               "\n\tTo: " + (separateEmails ? "" : "(" + recipients.size() + ") " + recipients) +
+               "\n\tBcc: " + (separateEmails ? "(" + recipients.size() + ") " + recipients : "") +
+               "\n\tSubject: " + subject +
+               "\n\tBody: " + getBody() +
+               "\n\tAttachments: " + (sendAttachments ? attachments.toString() : "");
     }
 }

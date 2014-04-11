@@ -34,7 +34,7 @@ public class Constants
     /* E-TICKET CONSTANTS */
     public static final int ETICKET_FIRST_NAME_X = 105;
     public static final int ETICKET_FIRST_NAME_Y = 112;
-    ;
+
     public static final int   ETICKET_LAST_NAME_X       = 531;
     public static final int   ETICKET_LAST_NAME_Y       = 112;
     public static final int   ETICKET_STUDENT_TYPE_X    = 308;

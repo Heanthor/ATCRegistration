@@ -53,7 +53,7 @@ public class FestivalXMLParser
         // get list of "Event" nodes
         NodeList eventList = eventsEle.getElementsByTagName("Event");
         if (eventList.getLength() != numEvents)
-            AtcErr.createErrorDialog("Number of \"Event\" tags: expected '%d', found '%d'", numEvents, eventList.getLength());
+            new AtcErr("Number of \"Event\" tags: expected '%d', found '%d'", numEvents, eventList.getLength());
 
         for (int i = 0; i < numEvents; ++i)
             eventArr[i] = parseNextEvent((Element) eventList.item(i));

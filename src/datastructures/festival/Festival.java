@@ -32,7 +32,7 @@ public class Festival
     public Festival(String festivalFile)
     {
         if (festivalFile == null)
-            AtcErr.createErrorDialog("Festival XML File: NULL");
+            new AtcErr("Festival XML File: NULL");
 
         FestivalXMLParser fxmlp = new FestivalXMLParser(festivalFile);
         events = fxmlp.getEvents(FestivalDay.values().length);

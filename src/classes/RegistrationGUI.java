@@ -568,7 +568,7 @@ public class RegistrationGUI
         }
         catch (BadLocationException e)
         {
-            AtcErr.createErrorDialog("Error trying to clear out the list of classes.");
+            new AtcErr("Error trying to clear out the list of classes.");
         }
     }
 
@@ -663,7 +663,7 @@ public class RegistrationGUI
         }
         catch (BadLocationException e)
         {
-            AtcErr.createErrorDialog("Error trying to update the registration summary");
+            new AtcErr("Error trying to update the registration summary");
         }
     }
 

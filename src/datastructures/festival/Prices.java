@@ -160,7 +160,7 @@ public class Prices
                 return sp;
 
         // this is a problem
-        AtcErr.createErrorDialog("Could not find special pass type: '%s'", passType);
+        new AtcErr("Could not find special pass type: '%s'", passType);
         return null;
     }
 
@@ -204,7 +204,7 @@ public class Prices
                 return mp;
 
         // this is a problem
-        AtcErr.createErrorDialog("Could not find milonga price for day: '%s'", day);
+        new AtcErr("Could not find milonga price for day: '%s'", day);
         return null;
     }
 
