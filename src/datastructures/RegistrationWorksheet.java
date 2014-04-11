@@ -39,7 +39,6 @@ public class RegistrationWorksheet
     private ArrayList<CellEntry> dancerTypeCol;
     private ArrayList<CellEntry> expLvlCol;
     private ArrayList<CellEntry> completedRegCol;
-    private ArrayList<CellEntry> paymentRcvdCol;
     private ArrayList<CellEntry> eticketCol;
     private ArrayList<CellEntry> numRegistrantsCol;
     private ArrayList<CellEntry> secondRegFirstNameCol;
@@ -63,7 +62,6 @@ public class RegistrationWorksheet
         dancerTypeCol = new ArrayList<>();
         expLvlCol = new ArrayList<>();
         completedRegCol = new ArrayList<>();
-        paymentRcvdCol = new ArrayList<>();
         eticketCol = new ArrayList<>();
         numRegistrantsCol= new ArrayList<>();
         secondRegFirstNameCol = new ArrayList<>();
@@ -116,8 +114,6 @@ public class RegistrationWorksheet
         expLvlCol.ensureCapacity(numRows);
         completedRegCol.clear();
         completedRegCol.ensureCapacity(numRows);
-        paymentRcvdCol.clear();
-        paymentRcvdCol.ensureCapacity(numRows);
         eticketCol.clear();
         eticketCol.ensureCapacity(numRows);
         numRegistrantsCol.clear();
@@ -171,9 +167,6 @@ public class RegistrationWorksheet
                     break;
                 case Constants.COMPLETED_REGISTRANT_COL:
                     completedRegCol.add(entry);
-                    break;
-                case Constants.PAYMENT_RECEIVED_COL:
-                    paymentRcvdCol.add(entry);
                     break;
                 case Constants.ETICKET_COL:
                     eticketCol.add(entry);

@@ -22,10 +22,9 @@ public class Constants
     public static final int    SECOND_REGISTRANT_LAST_NAME_COL   = 16;
     public static final int    SECOND_REGISTRANT_DANCER_TYPE_COL = 17;
     public static final int    CLASS_MIN_COL                     = 25;
-    public static final int    CLASS_MAX_COL                     = 71;
-    public static final int    COMPLETED_REGISTRANT_COL          = 74; // agreement col
-    public static final int    PAYMENT_RECEIVED_COL              = 87;
-    public static final int    ETICKET_COL                       = 88;
+    public static final int    CLASS_MAX_COL                     = 85;
+    public static final int    COMPLETED_REGISTRANT_COL          = 87; // agreement col
+    public static final int    ETICKET_COL                       = 101;
     public static final String ETICKET_SENT                      = "x";
 
     /* CELL FEED PARAMETERS NUMBERS */
