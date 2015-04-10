@@ -1,12 +1,13 @@
 package datastructures;
 
+import com.google.gdata.data.spreadsheet.CellEntry;
+import com.google.gdata.data.spreadsheet.CellFeed;
+import constants.Constants;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.google.gdata.data.spreadsheet.CellEntry;
-import com.google.gdata.data.spreadsheet.CellFeed;
 
 /**
  * This class abstracts all the work in getting the various information
@@ -135,64 +136,67 @@ public class RegistrationWorksheet
             ArrayList<CellEntry> classes = new ArrayList<CellEntry>();
             int currentRow = entry.getCell().getRow();
 
-            do
+            for (; cfIter.hasNext() && entry.getCell().getRow() == currentRow; entry = cfIter.next())
             {
                 int currentCol = entry.getCell().getCol();
 
-                switch (currentCol)
+                if (currentCol == Constants.AMOUNT_COL)
                 {
-                case Constants.AMOUNT_COL:
                     amountCol.add(entry);
-                    break;
-                case Constants.FIRST_NAME_COL:
-                    firstNameCol.add(entry);
-                    break;
-                case Constants.LAST_NAME_COL:
-                    lastNameCol.add(entry);
-                    break;
-                case Constants.EMAIL_COL:
-                    emailCol.add(entry);
-                    break;
-                case Constants.PHONE_COL:
-                    phoneCol.add(entry);
-                    break;
-                case Constants.STUDENT_TYPE_COL:
-                    studentTypeCol.add(entry);
-                    break;
-                case Constants.DANCER_TYPE_COL:
-                    dancerTypeCol.add(entry);
-                    break;
-                case Constants.EXP_LVL_COL:
-                    expLvlCol.add(entry);
-                    break;
-                case Constants.COMPLETED_REGISTRANT_COL:
-                    completedRegCol.add(entry);
-                    break;
-                case Constants.ETICKET_COL:
-                    eticketCol.add(entry);
-                    break;
-                case Constants.NUMBER_REGISTRANTS_COL:
-                    numRegistrantsCol.add(entry);
-                    break;
-                case Constants.SECOND_REGISTRANT_FIRST_NAME_COL:
-                    secondRegFirstNameCol.add(entry);
-                    break;
-                case Constants.SECOND_REGISTRANT_LAST_NAME_COL:
-                    secondRegLastNameCol.add(entry);
-                    break;
-                default:
-                    // check if in class range
-                    if (Constants.CLASS_MIN_COL <= currentCol && currentCol <= Constants.CLASS_MAX_COL)
-                        classes.add(entry);
-                    break;
                 }
-
-                if (!cfIter.hasNext())
-                    break;
-                else
-                    entry = cfIter.next();
+                else if (currentCol == Constants.FIRST_NAME_COL)
+                {
+                    firstNameCol.add(entry);
+                }
+                else if (currentCol == Constants.LAST_NAME_COL)
+                {
+                    lastNameCol.add(entry);
+                }
+                else if (currentCol == Constants.EMAIL_COL)
+                {
+                    emailCol.add(entry);
+                }
+                else if (currentCol == Constants.PHONE_COL)
+                {
+                    phoneCol.add(entry);
+                }
+                else if (currentCol == Constants.STUDENT_TYPE_COL)
+                {
+                    studentTypeCol.add(entry);
+                }
+                else if (currentCol == Constants.DANCER_TYPE_COL)
+                {
+                    dancerTypeCol.add(entry);
+                }
+                else if (currentCol == Constants.EXP_LVL_COL)
+                {
+                    expLvlCol.add(entry);
+                }
+                else if (currentCol == Constants.COMPLETED_REGISTRANT_COL)
+                {
+                    completedRegCol.add(entry);
+                }
+                else if (currentCol == Constants.ETICKET_COL)
+                {
+                    eticketCol.add(entry);
+                }
+                else if (currentCol == Constants.NUMBER_REGISTRANTS_COL)
+                {
+                    numRegistrantsCol.add(entry);
+                }
+                else if (currentCol == Constants.SECOND_REGISTRANT_FIRST_NAME_COL)
+                {
+                    secondRegFirstNameCol.add(entry);
+                }
+                else if (currentCol == Constants.SECOND_REGISTRANT_LAST_NAME_COL)
+                {
+                    secondRegLastNameCol.add(entry);
+                }
+                else if (Constants.CLASS_MIN_COL <= currentCol && currentCol <= Constants.CLASS_MAX_COL)
+                {
+                    classes.add(entry);
+                }
             }
-            while (entry.getCell().getRow() == currentRow);
 
             // add ArrayList of classes
             classRows.add(classes);
@@ -222,7 +226,7 @@ public class RegistrationWorksheet
     {
         ArrayList<Registrant> regs = new ArrayList<>(amountCol.size());
 
-        int numRegs = amountCol.size();
+        int numRegs = amountCol.size() - 1;
         for (int i = 0; i < numRegs; ++i)
         {
             String eticketSentEntry = eticketCol.get(i).getCell().getInputValue();
@@ -259,7 +263,7 @@ public class RegistrationWorksheet
                                                 Enums.stringToDancerType(dancerTypeCol.get(i).getCell().getInputValue()),
                                                 Enums.stringToExperienceLevel(expLvlCol.get(i).getCell().getInputValue()),
                                                 amnt,
-                                                Integer.parseInt(numRegistrantsCol.get(i).getCell().getInputValue()),
+                                                getNumRegistraints(numRegistrantsCol.get(i).getCell().getInputValue()),
                                                 classes,
                                                 isEticketSent,
                                                 secondRegFirstNameCol.get(i).getCell().getInputValue(),
@@ -269,6 +273,20 @@ public class RegistrationWorksheet
         }
 
         return regs;
+    }
+
+    private static final String REGISTERING_ALONE = "I am registering alone";
+
+    private int getNumRegistraints(String numRegistrantsResponse)
+    {
+        if (REGISTERING_ALONE.equals(numRegistrantsResponse))
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
     }
 
     /**

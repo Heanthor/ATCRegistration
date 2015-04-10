@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import classes.AtcErr;
 import classes.FestivalXMLParser;
-import datastructures.Constants;
-import datastructures.Enums;
 import datastructures.Enums.FestivalDay;
 import datastructures.Enums.SpecialPassType;
 import datastructures.Enums.StudentType;

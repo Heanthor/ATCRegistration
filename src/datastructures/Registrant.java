@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import constants.Constants;
 import datastructures.Enums.*;
 
 /**
@@ -74,7 +75,7 @@ public class Registrant implements Comparable<Registrant>
      * Returns a list of classes, however, some may not
      * be actual classes if the list was pulled from the spreadsheet.
      * To receive only true classes, edit the filter strings
-     * in {@link Constants#CLASS_FILTER_STRINGS} and use
+     * in {@link constants.Constants#CLASS_FILTER_STRINGS} and use
      * {@link #getFilteredClasses()}.
      *
      * @return list of unfiltered classes
@@ -87,7 +88,7 @@ public class Registrant implements Comparable<Registrant>
     /**
      * Returns a list of classes which pass through the filter
      * given by the list of keywords to filter on in
-     * {@link datastructures.Constants#CLASS_FILTER_STRINGS}.
+     * {@link constants.Constants#CLASS_FILTER_STRINGS}.
      *
      * @return a list of classes which pass through the filter
      */

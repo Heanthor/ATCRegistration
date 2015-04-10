@@ -8,7 +8,7 @@ import java.awt.*;
  *
  * @author benjamyn
  */
-public class AtcErr extends Error
+public class AtcErr
 {
     public AtcErr(String msg)
     {
@@ -33,7 +33,7 @@ public class AtcErr extends Error
     private String generateStackTrace()
     {
         StringBuilder builder = new StringBuilder();
-        for (StackTraceElement e : getStackTrace())
+        for (StackTraceElement e : Thread.currentThread().getStackTrace())
         {
             builder.append(e.toString()).append("\n");
         }

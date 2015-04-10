@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<eticket-config>
+
+    <column name="eticket-first-name-x" value="105"/>
+    <column name="eticket-first-name-y" value="112"/>
+
+    <column name="eticket-last-name-x" value="531"/>
+    <column name="eticket-last-name-y" value="112"/>
+
+    <column name="eticket-student-type-x" value="308"/>
+    <column name="eticket-student-type-y" value="157"/>
+
+    <column name="eticket-classes-x" value="39"/>
+    <column name="eticket-first-class-y" value="210"/>
+    <column name="eticket-class-increment-y" value="21"/>
+
+    <column name="eticket-large-font-size" value="30"/>
+    <column name="eticket-small-font-size" value="20"/>
+
+</eticket-config>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DO NOT MOVE THIS FILE
+    feel free to edit it though
+
+    This file contains the mapping of columns in the google spreadsheets to what the columns mean
+-->
+<worksheet-configuration>
+
+    <column name="amount-col" value="3"/>
+    <column name="first-name-col" value="6"/>
+    <column name="last-name-col" value="7"/>
+    <column name="email-col" value="8"/>
+    <column name="phone-col" value="9"/>
+    <column name="student-type-col" value="10"/>
+    <column name="dancer-type-col" value="11"/>
+    <column name="exp-lvl-col" value="12"/>
+    <column name="number-registrants-col" value="13"/>
+
+    <column name="second-registrant-first-name-col" value="15"/>
+    <column name="second-registrant-last-name-col" value="16"/>
+    <column name="second-registrant-dancer-type-col" value="17"/>
+
+    <column name="class-min-col" value="27"/>
+    <column name="class-max-col" value="77"/>
+
+    <!-- This should be the agreement to the terms and conditions column -->
+    <column name="completed-registrant-col" value="92"/>
+
+    <!--
+        This should be one more than the last column that formsite populates - this column needs to be created
+        on the sheet if it does not exist
+    -->
+    <column name="eticket-col" value="104"/>
+
+    <!--
+        These are hints to make the data sent back by google as small as possible. Generally, they should be set to:
+           * cell-feed-first-col: amount-col
+           * cell-feed-last-col : eticket-col
+    -->
+    <column name="cell-feed-first-col" value="3"/>
+    <column name="cell-feed-last-col" value="104"/>
+
+</worksheet-configuration>

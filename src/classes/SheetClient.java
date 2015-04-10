@@ -21,7 +21,7 @@ import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
 import datastructures.AccountInformation;
-import datastructures.Constants;
+import constants.Constants;
 import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;

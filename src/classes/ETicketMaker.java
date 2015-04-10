@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import datastructures.Constants;
+import constants.Constants;
 import datastructures.Name;
 import datastructures.Enums.StudentType;
 
