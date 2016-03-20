@@ -64,9 +64,14 @@ public class Emailer
         }
         catch (MessagingException e)
         {
+            System.out.println(e.getMessage());
             new AtcErr("Could not connect to account with username '%s' and password '%s'",
                        userName, passwd);
+
         }
+
+        System.out.println("Worked");
+        System.exit(0);
     }
 
     public void setSubjectLine(String subjLine)

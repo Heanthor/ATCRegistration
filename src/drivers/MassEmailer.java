@@ -101,7 +101,7 @@ public class MassEmailer
     public MassEmailer(Configuration config, RegistrationMode regMode)
     {
         ai = config.getAccountInformation();
-        sc = new SheetClient(ai, SheetClientMode.FORM_SITE, regMode);
+        //sc = new SheetClient(ai, SheetClientMode.FORM_SITE, regMode);
         emailer = new Emailer(ai.userName, ai.passwd);
     }
 
