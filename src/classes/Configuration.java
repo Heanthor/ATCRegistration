@@ -1,5 +1,6 @@
 package classes;
 
+import datastructures.DatabaseInformation;
 import org.w3c.dom.Element;
 import datastructures.AccountInformation;
 
@@ -36,6 +37,9 @@ public class Configuration
 
     private int                taxPercent;
     private AccountInformation accInfo;
+
+
+    private DatabaseInformation databaseInfo;
 
     // XML structure information
     private final String   eticketFileTag         = "eTicketFile";
@@ -113,6 +117,14 @@ public class Configuration
         String userName = XmlParserHelper.getContent(accEmailEle, "UserName");
         String pword = XmlParserHelper.getContent(accEmailEle, "Password");
 
+        // parse database information
+        Element dbRoot = XmlParserHelper.getSingleElement(rootEle, "DB");
+
+        String dbURL = XmlParserHelper.getContent(dbRoot, "URL");
+        String username = XmlParserHelper.getContent(dbRoot, "UserName");
+        String password = XmlParserHelper.getContent(dbRoot, "Password");
+        String dbName = XmlParserHelper.getContent(dbRoot, "Database");
+
         // parse the registrations for early/late
         String[] earlyRegInfo = new String[RegistrationInfo.NUMBER_INFOS.ordinal()];
         String[] lateRegInfo = new String[RegistrationInfo.NUMBER_INFOS.ordinal()];
@@ -135,6 +147,8 @@ public class Configuration
 
         accInfo = new AccountInformation(userName, pword, stringInversion[0],
                                          stringInversion[1], stringInversion[2]);
+
+        databaseInfo = new DatabaseInformation(dbURL, username, password, dbName);
     }
 
     private void parseRegistrationInfo(Element regInfoEle, String[] regInfo)
@@ -169,6 +183,10 @@ public class Configuration
     public final AccountInformation getAccountInformation()
     {
         return accInfo;
+    }
+
+    public final DatabaseInformation getDatabaseInfo() {
+        return databaseInfo;
     }
 
     public int getTaxPercent()
