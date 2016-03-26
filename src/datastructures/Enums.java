@@ -195,9 +195,9 @@ public class Enums
     {
         if (sType == null || sType.compareTo("") == 0)
             return null;
-        else if (sType.toLowerCase().contains("non-umd"))
+        else if (sType.toLowerCase().contains("student"))
             return StudentType.OTHER_STUDENT;
-        else if (sType.toLowerCase().contains("umd"))
+        else if (sType.toLowerCase().contains("student"))
             return StudentType.UMD_STUDENT;
         else if (sType.toLowerCase().contains("general"))
             return StudentType.GENERAL_ADMISSION;

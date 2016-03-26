@@ -69,9 +69,6 @@ public class Emailer
                        userName, passwd);
 
         }
-
-        System.out.println("Worked");
-        System.exit(0);
     }
 
     public void setSubjectLine(String subjLine)

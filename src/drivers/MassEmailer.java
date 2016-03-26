@@ -1,14 +1,13 @@
 package drivers;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.List;
 
-import classes.AtcErr;
-import classes.Configuration;
+import classes.*;
 import classes.Configuration.EmailType;
-import classes.Emailer;
-import classes.SheetClient;
 import datastructures.AccountInformation;
+import datastructures.DatabaseInformation;
 import datastructures.Enums.RegistrationMode;
 import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
@@ -26,48 +25,39 @@ import javax.swing.*;
  *
  * @author benjamyn
  */
-public class MassEmailer
-{
-    private static enum EmailerOptions
-    {
-        PRE_FESTIVAL
-                {
-                    @Override
-                    public String toString()
-                    {
-                        return "Pre-Festival";
-                    }
+public class MassEmailer {
+    private static enum EmailerOptions {
+        PRE_FESTIVAL {
+            @Override
+            public String toString() {
+                return "Pre-Festival";
+            }
 
-                    @Override
-                    EmailType getEmailType()
-                    {
-                        return EmailType.PREFESTIVAL;
-                    }
-                },
-        THANK_YOU
-                {
-                    @Override
-                    public String toString()
-                    {
-                        return "Thank You";
-                    }
+            @Override
+            EmailType getEmailType() {
+                return EmailType.PREFESTIVAL;
+            }
+        },
+        THANK_YOU {
+            @Override
+            public String toString() {
+                return "Thank You";
+            }
 
-                    @Override
-                    EmailType getEmailType()
-                    {
-                        return EmailType.THANK_YOU;
-                    }
-                };
+            @Override
+            EmailType getEmailType() {
+                return EmailType.THANK_YOU;
+            }
+        };
 
         abstract EmailType getEmailType();
     }
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         int res = JOptionPane.showOptionDialog(null, "Do you want to send the pre-festival or thank-you email?",
-                                               "What would you like to do?", JOptionPane.DEFAULT_OPTION,
-                                               JOptionPane.QUESTION_MESSAGE, null,
-                                               EmailerOptions.values(), null);
+                "What would you like to do?", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                EmailerOptions.values(), null);
 
         Configuration config = new Configuration();
         EmailType eType = EmailerOptions.values()[res].getEmailType();
@@ -82,15 +72,15 @@ public class MassEmailer
         me.addRegistrantsForMode(RegistrationMode.EARLY_REGISTRATION);
         me.addRegistrantsForMode(RegistrationMode.LATE_REGISTRATION);
 
-        if (!me.sendEmails())
-        {
+        if (!me.sendEmails()) {
             new AtcErr("Did not send the early registrants their emails");
         }
     }
 
     private AccountInformation ai;
-    private SheetClient        sc;
-    private Emailer            emailer;
+    private DatabaseInformation db;
+    private DBClient rds;
+    private Emailer emailer;
 
     /**
      * Sets up the account information, spreadsheet, and emailing features
@@ -98,11 +88,17 @@ public class MassEmailer
      * @param config  Configuration object containing the meta-data
      * @param regMode registration mode to start the SheetClient in
      */
-    public MassEmailer(Configuration config, RegistrationMode regMode)
-    {
+    public MassEmailer(Configuration config, RegistrationMode regMode) {
         ai = config.getAccountInformation();
-        //sc = new SheetClient(ai, SheetClientMode.FORM_SITE, regMode);
+        db = config.getDatabaseInfo();
+        rds = new DBClient(db, regMode);
         emailer = new Emailer(ai.userName, ai.passwd);
+
+        try {
+            rds.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -112,8 +108,7 @@ public class MassEmailer
      * @param bodyFile
      * @param subjLine
      */
-    public void setUpEmail(String bodyFile, String subjLine)
-    {
+    public void setUpEmail(String bodyFile, String subjLine) {
         emailer.resetEmail();
         emailer.setSeperateEmails(true);
         emailer.sendAttachments(false);
@@ -121,20 +116,12 @@ public class MassEmailer
         emailer.setBodyFile(bodyFile);
     }
 
-    void addRegistrantsForMode(RegistrationMode mode)
-    {
+    void addRegistrantsForMode(RegistrationMode mode) {
         // reset the sheet client for the given mode
-        sc.setRegistrationMode(mode);
-
-        sc.setMode(SheetClientMode.FORM_SITE);
-        List<Registrant> paidRegsFormSite = sc.getPaidRegistrants();
-        sc.setMode(SheetClientMode.ON_SITE);
-        List<Registrant> paidRegsOnsite = sc.getPaidRegistrants();
+        List<Registrant> paidRegsFormSite = rds.getPaidRegistrants();
 
         // add recipients
         for (Registrant reg : paidRegsFormSite)
-            emailer.addRecipient(reg.email);
-        for (Registrant reg : paidRegsOnsite)
             emailer.addRecipient(reg.email);
     }
 
@@ -144,8 +131,7 @@ public class MassEmailer
      *
      * @return true if emails were sent, false otherwise
      */
-    public boolean sendEmails()
-    {
+    public boolean sendEmails() {
         String msg = String.format("The email information that will be sent is: %s\n", emailer);
         JTextArea textArea = new JTextArea(msg);
         textArea.setLineWrap(true);
@@ -155,9 +141,8 @@ public class MassEmailer
         scrollPane.setPreferredSize(new Dimension(800, 600));
 
         int res = JOptionPane.showOptionDialog(null, scrollPane, "Email Contents", JOptionPane.OK_CANCEL_OPTION,
-                                               JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (res == JOptionPane.CANCEL_OPTION || res == JOptionPane.CLOSED_OPTION)
-        {
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (res == JOptionPane.CANCEL_OPTION || res == JOptionPane.CLOSED_OPTION) {
             new AtcErr("Not sending emails.");
         }
 
@@ -171,12 +156,10 @@ public class MassEmailer
         return true;
     }
 
-    private void queryUserIfSure(String msg)
-    {
+    private void queryUserIfSure(String msg) {
         int res = JOptionPane.showOptionDialog(null, msg, "Are you sure?", JOptionPane.OK_CANCEL_OPTION,
-                                               JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (res == JOptionPane.CANCEL_OPTION)
-        {
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (res == JOptionPane.CANCEL_OPTION) {
             new AtcErr("Not sending emails.");
         }
     }
