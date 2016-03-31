@@ -69,8 +69,8 @@ public class MassEmailer {
         MassEmailer me = new MassEmailer(config, RegistrationMode.EARLY_REGISTRATION);
         me.setUpEmail(emailBodyFile, subjectLine);
 
-        me.addRegistrantsForMode(RegistrationMode.EARLY_REGISTRATION);
-        me.addRegistrantsForMode(RegistrationMode.LATE_REGISTRATION);
+//        me.addRegistrantsForMode(RegistrationMode.EARLY_REGISTRATION);
+        me.addRegistrantsForMode(null);
 
         if (!me.sendEmails()) {
             new AtcErr("Did not send the early registrants their emails");
