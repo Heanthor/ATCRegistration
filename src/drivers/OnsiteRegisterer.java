@@ -258,6 +258,7 @@ public class OnsiteRegisterer
         return new Registrant(m_sheetClient.getNumWorksheetRows() + 1,
                               m_gui.getFirstName(),
                               m_gui.getLastName(),
+                null, null,
                               m_gui.getEmail(),
                               m_gui.getPhoneNumber(),
                               m_gui.getStudentStatus(),

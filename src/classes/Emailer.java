@@ -3,10 +3,7 @@ package classes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import javax.activation.*;
 import javax.mail.*;
@@ -35,9 +32,9 @@ public class Emailer
     private String bodyFile;
     private List<String> attachments     = new LinkedList<String>();
     private boolean      sendAttachments = true;
-    private boolean      separateEmails  = false;
+    private boolean      separateEmails  = true;
 
-    private HashMap<String, String> attachmentForRegistrant = new HashMap<>();
+    private HashMap<String, List<String>> attachmentForRegistrant = new HashMap<>();
     /**
      * Initializes the mailing parameters, readying the object
      * for sending email
@@ -91,6 +88,7 @@ public class Emailer
     public void addRecipient(String recipient)
     {
         recipients.add(recipient);
+        attachmentForRegistrant.put(recipient, new ArrayList<String>());
     }
 
     public void sendAttachments(boolean bool)
@@ -113,6 +111,10 @@ public class Emailer
     public void addAttachment(String attachmentFile)
     {
         attachments.add(attachmentFile);
+    }
+
+    public void addAttachmentForAddress(String address, String attachmentFile) {
+        attachmentForRegistrant.get(address).add(attachmentFile);
     }
 
     public void removeAttachments()
@@ -141,25 +143,25 @@ public class Emailer
             // set subject
             message.setSubject(subject);
 
-            // create multipart message
-            Multipart multipart = new MimeMultipart();
-
-            // add body
-            multipart.addBodyPart(getMessageBodyPart());
-
-            // any attachments?
-            if (sendAttachments)
-                for (String attachmentFile : attachments)
-                    multipart.addBodyPart(getAttachmentBodyPart(attachmentFile));
-
-            // add content and attachments
-            message.setContent(multipart);
-
             // add recipients
             if (separateEmails)
             {
                 for (String recip : recipients)
                 {
+                    // create multipart message
+                    Multipart multipart = new MimeMultipart();
+
+                    // add body
+                    multipart.addBodyPart(getMessageBodyPart());
+
+                    // any attachments?
+                    if (sendAttachments)
+                        for (String attachmentFile : attachmentForRegistrant.get(recip))
+                            multipart.addBodyPart(getAttachmentBodyPart(attachmentFile));
+
+                    // add content and attachments
+                    message.setContent(multipart);
+
                     message.setRecipient(Message.RecipientType.TO, new InternetAddress(recip));
                     // send message
                     transport.sendMessage(message, message.getAllRecipients());

@@ -257,6 +257,7 @@ public class RegistrationWorksheet
                 Registrant reg = new Registrant(amountCol.get(i).getCell().getRow(),
                                                 firstNameCol.get(i).getCell().getInputValue(),
                                                 lastNameCol.get(i).getCell().getInputValue(),
+                        null, null,
                                                 emailCol.get(i).getCell().getInputValue(),
                                                 phoneCol.get(i).getCell().getInputValue(),
                                                 Enums.stringToStudentType(studentTypeCol.get(i).getCell().getInputValue()),

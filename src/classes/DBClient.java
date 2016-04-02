@@ -76,7 +76,8 @@ public class DBClient {
 
     public List<Registrant> getPaidRegistrants() {
         ArrayList<Registrant> toReturn = new ArrayList<>();
-        String queryString = "SELECT r.fname, r.lname, r.phone, r.tickettype, r.partnerfname, r.email, c.classes, c.passtype, c.price " +
+        String queryString = "SELECT r.fname, r.lname, r.phone, r.tickettype, r.partnerfname, r.partnerlname, " +
+                "r.email, c.classes, c.passtype, c.price " +
                 "FROM records r, classes c, confirmation f " +
                 "WHERE r.registerid = c.registerid and r.registerid = f.registerid and " +
                 "f.payment_status = 'Completed'";
@@ -115,15 +116,15 @@ public class DBClient {
 
     private Registrant parseDbResult(ResultSet rs) throws SQLException {
         Name name = new Name(rs.getString("fname"), rs.getString("lname"));
+        Name partnername = new Name(rs.getString("partnerfname"), rs.getString("partnerlname"));
         String email = rs.getString("email");
         String phone = rs.getString("phone");
         String passtype = rs.getString("tickettype");
-        String partnerFname = rs.getString("partnerfname");
         String classString = rs.getString("classes");
         // This all assumes valid format, which is stored in the db
         String[] classList = classString.split(",");
 
-        int numRegistrants = partnerFname == null ? 1 : 2;
+        int numRegistrants = partnername.first == null ? 1 : 2;
 
         StudentType s = Enums.stringToStudentType(passtype);
         ArrayList<String> classes = new ArrayList<>();
@@ -132,6 +133,7 @@ public class DBClient {
             classes.add(ClassStringConverter.getClass(Integer.parseInt(c)));
         }
 
-        return new Registrant(-1, name.first, name.last, email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null);
+        return new Registrant(-1, name.first, name.last, partnername.first, partnername.last,
+                email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null);
     }
 }

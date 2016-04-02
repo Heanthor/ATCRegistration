@@ -3,6 +3,7 @@ package datastructures;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.jar.Attributes;
 
 import constants.Constants;
 import datastructures.Enums.*;
@@ -19,6 +20,7 @@ public class Registrant implements Comparable<Registrant>
     /* ***************************************************/
     public final int             row;
     public final Name            name;
+    public final Name            partnername;
     public final String          email;
     public final String          phone;
     public final StudentType     studentType;
@@ -34,6 +36,8 @@ public class Registrant implements Comparable<Registrant>
     public Registrant(int row,
                       String firstName,
                       String lastName,
+                      String partnerfname,
+                      String partnerlname,
                       String email,
                       String phone,
                       StudentType studentType,
@@ -48,6 +52,7 @@ public class Registrant implements Comparable<Registrant>
     {
         this.row = row;
         this.name = new Name(firstName, lastName);
+        this.partnername = new Name(partnerfname, partnerlname);
         this.email = email;
         this.phone = phone;
         this.studentType = studentType;

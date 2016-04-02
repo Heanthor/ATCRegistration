@@ -15,7 +15,7 @@
 		<EmailSubject>Thank You from ATC</EmailSubject>
 		<EmailBodyFile>files/media/thankYouEmail.html</EmailBodyFile>
 	</ThankYouEmail>
-	<eTicketFile>files/media/tango-eticket-2013.png</eTicketFile>
+	<eTicketFile>files/media/tango-eticket-2016.jpg</eTicketFile>
 	<FestivalClassesFile>files/info/festivalClasses.xml</FestivalClassesFile>
 	<AccountInfoFile>files/info/accountInfo.xml</AccountInfoFile>
 	<TaxPercent>3</TaxPercent>

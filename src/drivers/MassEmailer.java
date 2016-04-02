@@ -81,6 +81,7 @@ public class MassEmailer {
     private DatabaseInformation db;
     private DBClient rds;
     private Emailer emailer;
+    private ETicketMaker etm;
 
     /**
      * Sets up the account information, spreadsheet, and emailing features
@@ -93,6 +94,7 @@ public class MassEmailer {
         db = config.getDatabaseInfo();
         rds = new DBClient(db, regMode);
         emailer = new Emailer(ai.userName, ai.passwd);
+        etm = new ETicketMaker(config.getETicketFile(), "etickets");
 
         try {
             rds.connect();
@@ -121,8 +123,23 @@ public class MassEmailer {
         List<Registrant> paidRegsFormSite = rds.getPaidRegistrants();
 
         // add recipients
-        for (Registrant reg : paidRegsFormSite)
+        for (Registrant reg : paidRegsFormSite) {
             emailer.addRecipient(reg.email);
+            for (String ticket : generateTickets(reg)) {
+                emailer.addAttachmentForAddress(reg.email, ticket);
+            }
+        }
+    }
+
+    public String[] generateTickets(Registrant registrant) {
+        if (!registrant.hasSecondRegistrant()) {
+            return new String[] {etm.createTicket(registrant.name, registrant.studentType, registrant.getAllClasses())};
+        } else {
+            return new String[] {
+                    etm.createTicket(registrant.name, registrant.studentType, registrant.getAllClasses()),
+                    etm.createTicket(registrant.partnername, registrant.studentType, registrant.getAllClasses())
+            };
+        }
     }
 
     /**
