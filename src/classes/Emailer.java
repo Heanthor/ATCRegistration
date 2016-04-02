@@ -3,6 +3,7 @@ package classes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +37,7 @@ public class Emailer
     private boolean      sendAttachments = true;
     private boolean      separateEmails  = false;
 
+    private HashMap<String, String> attachmentForRegistrant = new HashMap<>();
     /**
      * Initializes the mailing parameters, readying the object
      * for sending email

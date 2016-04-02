@@ -41,8 +41,7 @@ public class DBClient {
             try {
                 Class.forName("org.mariadb.jdbc.Driver");
             } catch (ClassNotFoundException e) {
-                new AtcErr("Could not connect to the database");
-                new AtcErr(e.getMessage());;
+                new AtcErr(e.getMessage());
             }
 
             connection = DriverManager.getConnection("jdbc:mariadb://" + db.dbURL + "/" + db.dbName, db.dbUsername, db.dbPassword);
