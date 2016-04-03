@@ -9,7 +9,6 @@ import classes.Configuration.EmailType;
 import datastructures.AccountInformation;
 import datastructures.DatabaseInformation;
 import datastructures.Enums.RegistrationMode;
-import datastructures.Enums.SheetClientMode;
 import datastructures.Registrant;
 
 import javax.swing.*;
@@ -69,8 +68,8 @@ public class MassEmailer {
         MassEmailer me = new MassEmailer(config, RegistrationMode.EARLY_REGISTRATION);
         me.setUpEmail(emailBodyFile, subjectLine);
 
-//        me.addRegistrantsForMode(RegistrationMode.EARLY_REGISTRATION);
-        me.addRegistrantsForMode(null);
+//        me.processRegistrants(RegistrationMode.EARLY_REGISTRATION);
+        me.processRegistrants();
 
         if (!me.sendEmails()) {
             new AtcErr("Did not send the early registrants their emails");
@@ -118,12 +117,12 @@ public class MassEmailer {
         emailer.setBodyFile(bodyFile);
     }
 
-    void addRegistrantsForMode(RegistrationMode mode) {
-        // reset the sheet client for the given mode
+    private void processRegistrants() {
         List<Registrant> paidRegsFormSite = rds.getPaidRegistrants();
 
         // add recipients
         for (Registrant reg : paidRegsFormSite) {
+            System.out.println("Processing registrant " + reg.name + ".");
             emailer.addRecipient(reg.email);
             for (String ticket : generateTickets(reg)) {
                 emailer.addAttachmentForAddress(reg.email, ticket);

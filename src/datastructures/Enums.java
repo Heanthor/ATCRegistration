@@ -14,21 +14,7 @@ public class Enums
 {
     public enum StudentType
     {
-        UMD_STUDENT
-                {
-                    @Override
-                    public String getXmlTag()
-                    {
-                        return "UmdStudent";
-                    }
-
-                    @Override
-                    public String toString()
-                    {
-                        return "UMD Student";
-                    }
-                },
-        OTHER_STUDENT
+        STUDENT
                 {
                     @Override
                     public String getXmlTag()
@@ -39,7 +25,7 @@ public class Enums
                     @Override
                     public String toString()
                     {
-                        return "Non-UMD Student";
+                        return "Student";
                     }
                 },
         GENERAL_ADMISSION
@@ -179,7 +165,7 @@ public class Enums
      * word (case insensitive):
      * <ol>
      * <li>UMD_STUDENT: look for word "UMD"</li>
-     * <li>OTHER_STUDENT: look for word "other"</li>
+     * <li>STUDENT: look for word "other"</li>
      * <li>GENERAL_ADMISSION: look for word "general"</li>
      * </ol>
      * This approach was taken in case the string changed and all the configurations
@@ -196,9 +182,7 @@ public class Enums
         if (sType == null || sType.compareTo("") == 0)
             return null;
         else if (sType.toLowerCase().contains("student"))
-            return StudentType.OTHER_STUDENT;
-        else if (sType.toLowerCase().contains("student"))
-            return StudentType.UMD_STUDENT;
+            return StudentType.STUDENT;
         else if (sType.toLowerCase().contains("general"))
             return StudentType.GENERAL_ADMISSION;
         else

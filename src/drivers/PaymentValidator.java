@@ -280,10 +280,7 @@ public class PaymentValidator
 
                 switch (reg.studentType)
                 {
-                case UMD_STUDENT:
-                    ++numPaidUmdStud;
-                    break;
-                case OTHER_STUDENT:
+                case STUDENT:
                     ++numPaidOthStud;
                     break;
                 case GENERAL_ADMISSION:
@@ -320,10 +317,7 @@ public class PaymentValidator
 
                 switch (reg.studentType)
                 {
-                case UMD_STUDENT:
-                    ++numUnpaidUmdStud;
-                    break;
-                case OTHER_STUDENT:
+                case STUDENT:
                     ++numUnpaidOthStud;
                     break;
                 case GENERAL_ADMISSION:

@@ -42,6 +42,13 @@ public class ETicketMaker
     {
         String output = outputDir + "/" + name.last + "_" + name.first + "-eticket.png";
 
+        File f = new File(output);
+
+        if (f.exists()) {
+            System.out.format("File %s already exists.\n", output);
+            return output;
+        }
+
         try
         {
             BufferedImage image = ImageIO.read(new File(eticketFile));

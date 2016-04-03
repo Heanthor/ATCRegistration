@@ -130,7 +130,9 @@ public class DBClient {
         ArrayList<String> classes = new ArrayList<>();
 
         for (String c : classList) {
-            classes.add(ClassStringConverter.getClass(Integer.parseInt(c)));
+            if (c.length() > 0) {
+                classes.add(ClassStringConverter.getClass(Integer.parseInt(c)));
+            }
         }
 
         return new Registrant(-1, name.first, name.last, partnername.first, partnername.last,
