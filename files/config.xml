@@ -8,8 +8,8 @@
 		<EmailBodyFile>files/media/ticketEmail.html</EmailBodyFile>
 	</eTicketEmail>
 	<PreFestivalEmail>
-		<EmailSubject>Pre-Festival Information from ATC</EmailSubject>
-		<EmailBodyFile>files/media/preFestivalEmail.html</EmailBodyFile>
+		<EmailSubject>Terrapin Tango Festival eTicket</EmailSubject>
+		<EmailBodyFile>files/media/ticketEmail.html</EmailBodyFile>
 	</PreFestivalEmail>
 	<ThankYouEmail>
 		<EmailSubject>Thank You from ATC</EmailSubject>

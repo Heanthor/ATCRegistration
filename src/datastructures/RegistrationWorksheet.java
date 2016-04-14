@@ -268,7 +268,7 @@ public class RegistrationWorksheet
                                                 classes,
                                                 isEticketSent,
                                                 secondRegFirstNameCol.get(i).getCell().getInputValue(),
-                                                secondRegLastNameCol.get(i).getCell().getInputValue());
+                                                secondRegLastNameCol.get(i).getCell().getInputValue(), -1);
                 regs.add(reg);
             }
         }

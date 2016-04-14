@@ -269,7 +269,7 @@ public class OnsiteRegisterer
                               classes,
                               m_gui.getSendETicket().equals(YesNo.YES),
                               m_gui.getSecondRegFirstName(),
-                              m_gui.getSecondRegLastName());
+                              m_gui.getSecondRegLastName(), -1);
     }
 
     /**

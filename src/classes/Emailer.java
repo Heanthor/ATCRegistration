@@ -137,17 +137,18 @@ public class Emailer
 
         try
         {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(userName));
-
-            // set subject
-            message.setSubject(subject);
 
             // add recipients
             if (separateEmails)
             {
                 for (String recip : recipients)
                 {
+                    MimeMessage message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(userName));
+
+                    // set subject
+                    message.setSubject(subject);
+
                     // create multipart message
                     Multipart multipart = new MimeMultipart();
 
@@ -169,10 +170,10 @@ public class Emailer
             }
             else
             {
-                for (String recip : recipients)
-                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(recip));
-                // send message
-                transport.sendMessage(message, message.getAllRecipients());
+//                for (String recip : recipients)
+//                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(recip));
+//                // send message
+//                transport.sendMessage(message, message.getAllRecipients());
             }
         }
         catch (MessagingException mex)

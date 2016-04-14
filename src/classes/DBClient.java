@@ -76,7 +76,7 @@ public class DBClient {
 
     public List<Registrant> getPaidRegistrants() {
         ArrayList<Registrant> toReturn = new ArrayList<>();
-        String queryString = "SELECT r.fname, r.lname, r.phone, r.tickettype, r.partnerfname, r.partnerlname, " +
+        String queryString = "SELECT r.registerid, r.fname, r.lname, r.phone, r.tickettype, r.partnerfname, r.partnerlname, " +
                 "r.email, c.classes, c.passtype, c.price " +
                 "FROM records r, classes c, confirmation f " +
                 "WHERE r.registerid = c.registerid and r.registerid = f.registerid and " +
@@ -121,6 +121,7 @@ public class DBClient {
         String phone = rs.getString("phone");
         String passtype = rs.getString("tickettype");
         String classString = rs.getString("classes");
+        int registerid = Integer.parseInt(rs.getString("registerid"));
         // This all assumes valid format, which is stored in the db
         String[] classList = classString.split(",");
 
@@ -136,6 +137,6 @@ public class DBClient {
         }
 
         return new Registrant(-1, name.first, name.last, partnername.first, partnername.last,
-                email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null);
+                email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null, registerid);
     }
 }

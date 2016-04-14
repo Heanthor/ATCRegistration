@@ -30,6 +30,7 @@ public class Registrant implements Comparable<Registrant>
     public final int             numRegistrants;
     public final boolean         eticketSent;
     public final Name            secondRegName;
+    public final int             registerid;
 
     private final List<String> m_classes;
 
@@ -48,7 +49,8 @@ public class Registrant implements Comparable<Registrant>
                       List<String> classes,
                       boolean eticketSent,
                       String secondRegistrantFirstName,
-                      String secondRegistrantLastName)
+                      String secondRegistrantLastName,
+                      int registerid)
     {
         this.row = row;
         this.name = new Name(firstName, lastName);
@@ -62,6 +64,7 @@ public class Registrant implements Comparable<Registrant>
         this.numRegistrants = numRegistrants;
         this.eticketSent = eticketSent;
         this.secondRegName = new Name(secondRegistrantFirstName, secondRegistrantLastName);
+        this.registerid = registerid;
 
         m_classes = classes;
     }

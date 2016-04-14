@@ -1,15 +1,18 @@
 package drivers;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import classes.*;
 import classes.Configuration.EmailType;
-import datastructures.AccountInformation;
-import datastructures.DatabaseInformation;
+import datastructures.*;
 import datastructures.Enums.RegistrationMode;
-import datastructures.Registrant;
 
 import javax.swing.*;
 
@@ -82,6 +85,7 @@ public class MassEmailer {
     private Emailer emailer;
     private ETicketMaker etm;
 
+    private static ArrayList<Integer> sentRegisterIDs = new ArrayList<>();
     /**
      * Sets up the account information, spreadsheet, and emailing features
      *
@@ -112,7 +116,7 @@ public class MassEmailer {
     public void setUpEmail(String bodyFile, String subjLine) {
         emailer.resetEmail();
         emailer.setSeperateEmails(true);
-        emailer.sendAttachments(false);
+        emailer.sendAttachments(true);
         emailer.setSubjectLine(subjLine);
         emailer.setBodyFile(bodyFile);
     }
@@ -124,10 +128,34 @@ public class MassEmailer {
         for (Registrant reg : paidRegsFormSite) {
             System.out.println("Processing registrant " + reg.name + ".");
             emailer.addRecipient(reg.email);
+
             for (String ticket : generateTickets(reg)) {
                 emailer.addAttachmentForAddress(reg.email, ticket);
             }
+
+            sentRegisterIDs.add(reg.registerid);
         }
+//
+//        Registrant test1 = new Registrant(-1, "Reed", "Trevelyan", null, null, "reedtrevelyan@gmail.com", null,
+//                Enums.StudentType.GENERAL_ADMISSION, null, null, 0, 1, Arrays.asList("Class 1", "Class 2"), false,
+//                null, null, 123);
+//
+//        Registrant test2 = new Registrant(-1, "David", "Chorvinsky", null, null, "firekenace@gmail.com", null,
+//                Enums.StudentType.GENERAL_ADMISSION, null, null, 0, 1, Arrays.asList("Class 1", "Class 2"), false,
+//                null, null, 124);
+//
+//        emailer.addRecipient(test1.email);
+//        emailer.addRecipient(test2.email);
+//
+//        sentRegisterIDs.add(test1.registerid);
+//        sentRegisterIDs.add(test2.registerid);
+//
+//        emailer.addAttachmentForAddress(test1.email, generateTickets(test1)[0]);
+//        emailer.addAttachmentForAddress(test1.email, generateTickets(test2)[0]);
+//
+//        emailer.addAttachmentForAddress(test2.email, generateTickets(test2)[0]);
+//        emailer.addAttachmentForAddress(test2.email, generateTickets(test1)[0]);
+
     }
 
     public String[] generateTickets(Registrant registrant) {
@@ -168,6 +196,19 @@ public class MassEmailer {
 
         // Okay, I'm sending those emails then...........
         emailer.sendEmail();
+
+        // save registerIDs that have been sent to
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("files/sent_registerids.txt"));
+
+            for (int i: sentRegisterIDs) {
+                bw.write("" + i + "\n");
+            }
+
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return true;
     }
