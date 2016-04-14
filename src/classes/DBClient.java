@@ -8,6 +8,7 @@ import datastructures.Registrant;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static datastructures.Enums.StudentType;
@@ -135,6 +136,7 @@ public class DBClient {
                 classes.add(ClassStringConverter.getClass(Integer.parseInt(c)));
             }
         }
+        Collections.sort(classes);
 
         return new Registrant(-1, name.first, name.last, partnername.first, partnername.last,
                 email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null, registerid);

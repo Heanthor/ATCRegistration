@@ -40,8 +40,7 @@ public class ETicketMaker
      */
     public String createTicket(Name name, StudentType studentType, List<String> classes)
     {
-        String output = outputDir + "/" + name.last + "_" + name.first + "-eticket.png";
-
+        String output = outputDir + "/" + sanitize(name.last) + "_" + sanitize(name.first) + "-eticket.png";
         File f = new File(output);
 
         if (f.exists()) {
@@ -87,5 +86,10 @@ public class ETicketMaker
         }
 
         return output;
+    }
+
+    private static String sanitize(String in) {
+        return in.replaceAll("[^a-zA-Z0-9.-]", "_"); // disallowed characters
+
     }
 }

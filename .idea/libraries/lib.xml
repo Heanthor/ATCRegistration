@@ -5,6 +5,7 @@
       <root url="jar://$PROJECT_DIR$/lib/lablib-checkboxtree-3.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/forms-1.3.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/miglayout15-swing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-1.3.6.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

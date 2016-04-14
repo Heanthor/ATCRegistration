@@ -20,7 +20,7 @@ public class ClassStringConverter {
         classMapping.put(11, "Rhythmic Alteraciones for Vals");
         classMapping.put(12, "The Axis Unhinged: Comfy Volcadas");
         classMapping.put(14, "Yoga for Tango (Saturday)");
-        classMapping.put(16, "Developing a Floating Walk");
+        classMapping.put(16, "Action and Reaction");
         classMapping.put(17, "Uncovering the Magic: Exploring Musicality");
         classMapping.put(19, "Tersichore's Grand Milonga");
         classMapping.put(22, "The Silky Embrace: Effortless and Sensitive Connection");
