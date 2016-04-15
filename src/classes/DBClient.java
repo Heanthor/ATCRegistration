@@ -8,6 +8,7 @@ import datastructures.Registrant;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -101,13 +102,14 @@ public class DBClient {
 
     /**
      * Avoid adding duplicates to the list.
+     *
      * @param in
      * @param email
      * @return
      */
     private boolean emailInRegistrantList(List<Registrant> in, String email) {
-        for (Registrant i: in) {
-            if (i.email.equals(email)){
+        for (Registrant i : in) {
+            if (i.email.equals(email)) {
                 return true;
             }
         }
@@ -125,18 +127,27 @@ public class DBClient {
         int registerid = Integer.parseInt(rs.getString("registerid"));
         // This all assumes valid format, which is stored in the db
         String[] classList = classString.split(",");
+        int[] classListInt = new int[classList.length];
+
+        // sort by class index
+        for (int i = 0; i < classList.length; i++) {
+            String c = classList[i];
+
+            if (c.length() > 0) {
+                classListInt[i] = Integer.parseInt(classList[i]);
+            }
+        }
+
+        Arrays.sort(classListInt);
 
         int numRegistrants = partnername.first == null ? 1 : 2;
 
         StudentType s = Enums.stringToStudentType(passtype);
         ArrayList<String> classes = new ArrayList<>();
 
-        for (String c : classList) {
-            if (c.length() > 0) {
-                classes.add(ClassStringConverter.getClass(Integer.parseInt(c)));
-            }
+        for (int c : classListInt) {
+            classes.add(ClassStringConverter.getClass(c));
         }
-        Collections.sort(classes);
 
         return new Registrant(-1, name.first, name.last, partnername.first, partnername.last,
                 email, phone, s, null, null, 0.0, numRegistrants, classes, false, null, null, registerid);
